@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import Forecaster from "./Forecaster.jsx";
 const AI={all:{label:"All Australians",percentiles:{10:13000,20:55000,30:130000,40:220000,50:350000,60:520000,70:730000,80:1050000,90:1650000,95:2500000,99:5200000},median:350000},"18-24":{label:"Ages 18–24",percentiles:{10:1000,20:5000,30:12000,40:22000,50:35000,60:55000,70:85000,80:130000,90:210000,95:320000,99:650000},median:35000},"25-34":{label:"Ages 25–34",percentiles:{10:5000,20:22000,30:50000,40:90000,50:145000,60:220000,70:330000,80:490000,90:750000,95:1100000,99:2200000},median:145000},"35-44":{label:"Ages 35–44",percentiles:{10:15000,20:65000,30:145000,40:260000,50:420000,60:620000,70:870000,80:1200000,90:1850000,95:2700000,99:5000000},median:420000},"45-54":{label:"Ages 45–54",percentiles:{10:20000,20:90000,30:210000,40:380000,50:620000,60:900000,70:1250000,80:1750000,90:2700000,95:3900000,99:7500000},median:620000},"55-64":{label:"Ages 55–64",percentiles:{10:25000,20:110000,30:270000,40:490000,50:790000,60:1150000,70:1600000,80:2200000,90:3300000,95:4800000,99:9000000},median:790000},"65+":{label:"Ages 65+",percentiles:{10:50000,20:180000,30:380000,40:620000,50:900000,60:1250000,70:1700000,80:2350000,90:3500000,95:5000000,99:9500000},median:900000}};
 const AC={all:{label:"All Australian Couples",percentiles:{10:85000,20:220000,30:420000,40:680000,50:1000000,60:1400000,70:1900000,80:2700000,90:4100000,95:6000000,99:11500000},median:1000000},"18-24":{label:"Ages 18–24",percentiles:{10:8000,20:25000,30:60000,40:110000,50:180000,60:280000,70:420000,80:620000,90:950000,95:1400000,99:2800000},median:180000},"25-34":{label:"Ages 25–34",percentiles:{10:20000,20:75000,30:180000,40:330000,50:530000,60:780000,70:1100000,80:1550000,90:2400000,95:3500000,99:6500000},median:530000},"35-44":{label:"Ages 35–44",percentiles:{10:50000,20:200000,30:450000,40:780000,50:1200000,60:1700000,70:2300000,80:3100000,90:4800000,95:7000000,99:13000000},median:1200000},"45-54":{label:"Ages 45–54",percentiles:{10:70000,20:270000,30:600000,40:1050000,50:1650000,60:2300000,70:3100000,80:4300000,90:6500000,95:9500000,99:18000000},median:1650000},"55-64":{label:"Ages 55–64",percentiles:{10:90000,20:350000,30:800000,40:1400000,50:2100000,60:2900000,70:3900000,80:5400000,90:8000000,95:11500000,99:21000000},median:2100000},"65+":{label:"Ages 65+",percentiles:{10:150000,20:500000,30:1000000,40:1650000,50:2400000,60:3300000,70:4400000,80:6000000,90:9000000,95:13000000,99:24000000},median:2400000}};
 const AF=[{key:"property",label:"Property",hint:"Home + investment properties"},{key:"super",label:"Super",hint:"Combined balance"},{key:"shares",label:"Shares/ETFs",hint:"ASX, funds, crypto"},{key:"cash",label:"Cash",hint:"Bank, term deposits"},{key:"vehicle",label:"Vehicles",hint:"Cars, boats"},{key:"other_a",label:"Other Assets",hint:"Business, collectibles"}];
@@ -99,7 +100,7 @@ function Calculator(){
 }
 function Nav({page,setPage}){
   const [open,setOpen]=useState(false);
-  const pages=[{id:"home",l:"Home"},{id:"gen",l:"By Generation"},{id:"insights",l:"Insights"},{id:"about",l:"About the Data"}];
+  const pages=[{id:"home",l:"Home"},{id:"gen",l:"By Generation"},{id:"forecast",l:"Forecaster"},{id:"insights",l:"Insights"},{id:"about",l:"About the Data"}];
   return(<nav style={{position:"sticky",top:0,zIndex:100,background:"rgba(13,27,42,0.96)",backdropFilter:"blur(12px)",borderBottom:"1px solid rgba(240,237,230,0.07)",padding:"0 20px",display:"flex",alignItems:"center",justifyContent:"space-between",height:56}}>
     <div style={{fontWeight:800,fontSize:15,letterSpacing:"-0.01em",cursor:"pointer",display:"flex",alignItems:"center",gap:7}} onClick={()=>setPage("home")}>
       Wealth<span style={{color:"#E8935A"}}>Rank</span><span style={{fontSize:10,color:"rgba(240,237,230,0.3)",marginLeft:3,fontWeight:400}}>AU</span>
@@ -121,7 +122,7 @@ function Footer({setPage}){
           <p style={{fontSize:12,color:"rgba(240,237,230,0.32)",lineHeight:1.7,maxWidth:200,margin:"0 0 12px"}}>Free, data-driven tools to help Australians understand their financial position.</p>
           <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>{["No data stored","Free to use"].map(t=><div key={t} style={{display:"flex",alignItems:"center",gap:4,fontSize:10,color:"rgba(240,237,230,0.26)"}}><div style={{width:3,height:3,borderRadius:"50%",background:"#5BA08A"}}/>{t}</div>)}</div>
         </div>
-        <div><div style={th}>Tools</div>{[{l:"Net Worth Calculator",p:"home"},{l:"By Generation",p:"gen"},{l:"Insights",p:"insights"}].map(i=><button key={i.l} style={lnk} onClick={()=>setPage(i.p)}>{i.l}</button>)}</div>
+        <div><div style={th}>Tools</div>{[{l:"Net Worth Calculator",p:"home"},{l:"Wealth Forecaster",p:"forecast"},{l:"By Generation",p:"gen"},{l:"Insights",p:"insights"}].map(i=><button key={i.l} style={lnk} onClick={()=>setPage(i.p)}>{i.l}</button>)}</div>
         <div><div style={th}>Information</div>{[{l:"About the Data",p:"about"},{l:"Data Sources",p:"about"},{l:"Changelog",p:"about"}].map(i=><button key={i.l} style={lnk} onClick={()=>setPage(i.p)}>{i.l}</button>)}</div>
         <div><div style={th}>Legal</div>{[{l:"Privacy Policy",p:"privacy"},{l:"Disclaimer",p:"disclaimer"},{l:"Terms of Use",p:"terms"}].map(i=><button key={i.l} style={lnk} onClick={()=>setPage(i.p)}>{i.l}</button>)}</div>
       </div>
@@ -180,7 +181,7 @@ function Home({setPage}){
     <div style={{maxWidth:600,margin:"60px auto 0",padding:"0 24px"}}>
       <div style={{fontSize:10,letterSpacing:"0.14em",textTransform:"uppercase",color:"rgba(240,237,230,0.24)",marginBottom:14,textAlign:"center"}}>Also explore</div>
       <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(170px,1fr))",gap:10}}>
-        {[{id:"gen",t:"Wealth by Generation",d:"How Millennials, Gen X and Boomers compare.",c:"#7EB8D4"},{id:"insights",t:"Insights",d:"Data-driven articles on Australian wealth and super.",c:"#E8C05A"},{id:"about",t:"About the Data",d:"Where the numbers come from and what they mean.",c:"#5BA08A"}].map(p=>(<button key={p.id} onClick={()=>setPage(p.id)} style={{background:"#142133",border:`1px solid ${p.c}1a`,borderRadius:12,padding:"18px",textAlign:"left",cursor:"pointer"}}><div style={{width:24,height:2,background:p.c,borderRadius:2,marginBottom:10}}/><div style={{fontSize:13,fontWeight:700,marginBottom:4}}>{p.t}</div><div style={{fontSize:11,color:"rgba(240,237,230,0.38)",lineHeight:1.55,marginBottom:8}}>{p.d}</div><div style={{fontSize:11,color:p.c,fontWeight:600}}>View →</div></button>))}
+        {[{id:"gen",t:"Wealth by Generation",d:"How Millennials, Gen X and Boomers compare.",c:"#7EB8D4"},{id:"forecast",t:"Wealth Forecaster",d:"Project your net worth to retirement with life events.",c:"#A78BD4"},{id:"insights",t:"Insights",d:"Data-driven articles on Australian wealth and super.",c:"#E8C05A"},{id:"about",t:"About the Data",d:"Where the numbers come from and what they mean.",c:"#5BA08A"}].map(p=>(<button key={p.id} onClick={()=>setPage(p.id)} style={{background:"#142133",border:`1px solid ${p.c}1a`,borderRadius:12,padding:"18px",textAlign:"left",cursor:"pointer"}}><div style={{width:24,height:2,background:p.c,borderRadius:2,marginBottom:10}}/><div style={{fontSize:13,fontWeight:700,marginBottom:4}}>{p.t}</div><div style={{fontSize:11,color:"rgba(240,237,230,0.38)",lineHeight:1.55,marginBottom:8}}>{p.d}</div><div style={{fontSize:11,color:p.c,fontWeight:600}}>View →</div></button>))}
       </div>
     </div>
     <Footer setPage={setPage}/>
@@ -373,6 +374,7 @@ export default function App(){
     <Nav page={page} setPage={sp}/>
     {page==="home" && <Home setPage={sp}/>}
     {page==="gen" && <Generations setPage={sp}/>}
+    {page==="forecast" && <Forecaster setPage={sp}/>}
     {page==="insights" && <Insights setPage={sp} setArticle={setArticle}/>}
     {page==="article" && article && <ArticlePage id={article} setPage={sp}/>}
     {page==="about" && <About setPage={sp}/>}
