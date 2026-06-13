@@ -592,7 +592,7 @@ export default function Forecaster({ setPage }) {
           </div>
         </div>
       </div>
-    </div>
     <PageFooter setPage={setPage}/>
+  </div>
   );
 }
