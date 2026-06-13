@@ -94,6 +94,7 @@ function AssetBar({assets,liabilities}){
         </div>
       </div>}
     </div>
+    <PageFooter setPage={setPage}/>
   );
 }
 
@@ -131,6 +132,56 @@ function WhatIf({nw,accent}){
 }
 
 // ── Main Calculator Page ──────────────────────────────────────────────────────
+
+function PageFooter({setPage}){
+  const lnk={display:"block",fontSize:12,color:"rgba(240,237,230,0.4)",cursor:"pointer",marginBottom:7,background:"none",border:"none",padding:0,textAlign:"left"};
+  const th={fontSize:9,fontWeight:700,letterSpacing:"0.12em",textTransform:"uppercase",color:"rgba(240,237,230,0.28)",marginBottom:10};
+  return(
+    <footer style={{borderTop:"1px solid rgba(240,237,230,0.06)",marginTop:64,padding:"44px 24px 28px",background:"#0a1628"}}>
+      <div style={{maxWidth:780,margin:"0 auto"}}>
+        <div style={{display:"grid",gridTemplateColumns:"2fr 1fr 1fr 1fr",gap:28,marginBottom:36}}>
+          <div>
+            <div style={{fontWeight:800,fontSize:15,marginBottom:8,color:"#F0EDE6"}}>Wealth<span style={{color:"#E8935A"}}>Rank</span><span style={{fontSize:10,color:"rgba(240,237,230,0.3)",marginLeft:3,fontWeight:400}}>AU</span></div>
+            <p style={{fontSize:12,color:"rgba(240,237,230,0.32)",lineHeight:1.7,maxWidth:200,margin:"0 0 12px"}}>Free, data-driven tools to help Australians understand their financial position.</p>
+            <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+              {["No data stored","Free to use"].map(t=>(
+                <div key={t} style={{display:"flex",alignItems:"center",gap:4,fontSize:10,color:"rgba(240,237,230,0.26)"}}>
+                  <div style={{width:3,height:3,borderRadius:"50%",background:"#5BA08A"}}/>{t}
+                </div>
+              ))}
+            </div>
+          </div>
+          <div>
+            <div style={th}>Tools</div>
+            {[{l:"Net Worth",p:"calculator"},{l:"Income Calculator",p:"income"},{l:"Forecaster",p:"forecast"},{l:"By Generation",p:"gen"},{l:"Insights",p:"insights"}].map(i=>(
+              <button key={i.l} style={lnk} onClick={()=>setPage(i.p)}>{i.l}</button>
+            ))}
+          </div>
+          <div>
+            <div style={th}>Information</div>
+            {[{l:"About the Data",p:"about"},{l:"Data Sources",p:"about"},{l:"Changelog",p:"about"}].map(i=>(
+              <button key={i.l} style={lnk} onClick={()=>setPage(i.p)}>{i.l}</button>
+            ))}
+          </div>
+          <div>
+            <div style={th}>Legal</div>
+            {[{l:"Privacy Policy",p:"privacy"},{l:"Disclaimer",p:"disclaimer"},{l:"Terms of Use",p:"terms"}].map(i=>(
+              <button key={i.l} style={lnk} onClick={()=>setPage(i.p)}>{i.l}</button>
+            ))}
+          </div>
+        </div>
+        <div style={{borderTop:"1px solid rgba(240,237,230,0.05)",paddingTop:16,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
+          <div style={{fontSize:10,color:"rgba(240,237,230,0.18)"}}>© 2026 WealthRank AU. For informational purposes only. Not financial advice.</div>
+          <div style={{display:"flex",alignItems:"center",gap:10}}>
+            <div style={{fontSize:10,color:"rgba(240,237,230,0.18)"}}>Data: ABS 2021–22 · ASFA 2023–24</div>
+            <div style={{fontSize:9,background:"rgba(91,160,138,0.12)",color:"#5BA08A",border:"1px solid rgba(91,160,138,0.2)",borderRadius:4,padding:"2px 5px",fontWeight:600}}>v1.4</div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
 export default function Calculator({ setPage }) {
   const [ht,setHt]=useState("individual");
   const [mode,setMode]=useState("quick");
