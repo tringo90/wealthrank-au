@@ -88,7 +88,7 @@ function projectWealth(inputs, events) {
 }
 
 // Projection line chart using canvas
-function ForecastChart({ data, showBands, showBreakdown, accentColor }) {
+function ForecastChart({ data, dataB=[], showBands, showBreakdown, accentColor }) {
   const ref = useRef(null);
 
   useEffect(() => {
@@ -188,6 +188,21 @@ function ForecastChart({ data, showBands, showBreakdown, accentColor }) {
       ctx.strokeStyle = "rgba(240,237,230,0.2)"; ctx.lineWidth = 1; ctx.stroke();
     }
 
+    // Scenario B line
+    if (dataB.length > 1) {
+      ctx.beginPath();
+      dataB.forEach((d, i) => { i === 0 ? ctx.moveTo(xScale(i), yScale(d.nw)) : ctx.lineTo(xScale(i), yScale(d.nw)); });
+      ctx.strokeStyle = "#5BA08A";
+      ctx.lineWidth = 2;
+      ctx.setLineDash([6, 3]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      // End dot B
+      const lastB = dataB[dataB.length-1];
+      ctx.beginPath();
+      ctx.arc(xScale(dataB.length-1), yScale(lastB.nw), 4, 0, Math.PI*2);
+      ctx.fillStyle = "#5BA08A"; ctx.fill();
+    }
     // End dot
     const last = data[data.length - 1];
     ctx.beginPath();
@@ -202,7 +217,7 @@ function ForecastChart({ data, showBands, showBreakdown, accentColor }) {
     ctx.arc(xScale(0), yScale(data[0].nw), 4, 0, Math.PI * 2);
     ctx.fillStyle = "rgba(240,237,230,0.5)"; ctx.fill();
 
-  }, [data, showBands, showBreakdown, accentColor]);
+  }, [data, dataB, showBands, showBreakdown, accentColor]);
 
   return <canvas ref={ref} width={700} height={320} style={{ width: "100%", height: "auto", display: "block" }} />;
 }
@@ -223,25 +238,40 @@ const DEFAULT_INPUTS = {
   propGrowth: 4, superReturn: 7, investReturn: 7, inflation: 2.5,
   monthlySavings: 1000, superContrib: 600,
 };
+const DEFAULT_SCENARIO_B = {
+  monthlySavings: 1500, superContrib: 900,
+  propGrowth: 4, superReturn: 7, investReturn: 7,
+};
 
 export default function Forecaster({ setPage }) {
   const [inputs, setInputs] = useState(DEFAULT_INPUTS);
   const [events, setEvents] = useState([]);
-  const [showBands, setShowBands] = useState(true);
+  const [showBands, setShowBands] = useState(false);
   const [showBreakdown, setShowBreakdown] = useState(false);
   const [showNominal, setShowNominal] = useState(true);
+  const [showScenario, setShowScenario] = useState(false);
+  const [scenarioB, setScenarioB] = useState(DEFAULT_SCENARIO_B);
   const [activeTab, setActiveTab] = useState("starting");
   const [newEvent, setNewEvent] = useState({ age: "", type: "property_buy", amount: "", debt: "" });
   const [showAddEvent, setShowAddEvent] = useState(false);
 
   const si = (k, v) => setInputs(p => ({ ...p, [k]: v }));
 
-  const data = projectWealth({
+  const baseInputs = {
     ...inputs,
     property: pm(inputs.property), super: pm(inputs.super),
     investments: pm(inputs.investments), cash: pm(inputs.cash),
     mortgage: pm(inputs.mortgage), otherDebt: pm(inputs.otherDebt),
-  }, events);
+  };
+  const data = projectWealth(baseInputs, events);
+  const dataB = showScenario ? projectWealth({
+    ...baseInputs,
+    monthlySavings: scenarioB.monthlySavings,
+    superContrib: scenarioB.superContrib,
+    propGrowth: scenarioB.propGrowth,
+    superReturn: scenarioB.superReturn,
+    investReturn: scenarioB.investReturn,
+  }, events) : [];
 
   const retireData = data[data.length - 1] || {};
   const currentNW = data[0]?.nw || 0;
@@ -411,9 +441,10 @@ export default function Forecaster({ setPage }) {
                 {[{ label: "Confidence band", state: showBands, set: setShowBands }, { label: "Asset streams", state: showBreakdown, set: setShowBreakdown }].map(t => (
                   <button key={t.label} onClick={() => t.set(!t.state)} style={{ padding: "4px 10px", border: `1px solid ${t.state ? accentColor : "rgba(240,237,230,0.12)"}`, background: t.state ? accentColor + "18" : "transparent", color: t.state ? accentColor : "rgba(240,237,230,0.38)", borderRadius: 20, fontSize: 10, fontWeight: t.state ? 700 : 400, cursor: "pointer" }}>{t.label}</button>
                 ))}
+                <button onClick={() => setShowScenario(!showScenario)} style={{ padding: "4px 10px", border: `1px solid ${showScenario ? "#5BA08A" : "rgba(240,237,230,0.12)"}`, background: showScenario ? "#5BA08A18" : "transparent", color: showScenario ? "#5BA08A" : "rgba(240,237,230,0.38)", borderRadius: 20, fontSize: 10, fontWeight: showScenario ? 700 : 400, cursor: "pointer" }}>Compare scenario</button>
               </div>
             </div>
-            <ForecastChart data={data} showBands={showBands} showBreakdown={showBreakdown} accentColor={accentColor} />
+            <ForecastChart data={data} dataB={showScenario?dataB:[]} showBands={showBands} showBreakdown={showBreakdown} accentColor={accentColor} />
             {showBreakdown && (
               <div style={{ display: "flex", gap: 14, marginTop: 8, flexWrap: "wrap" }}>
                 {[{ c: "#5BA08A", l: "Property" }, { c: "#7EB8D4", l: "Super" }, { c: "#E8C05A", l: "Investments" }, { c: accentColor, l: "Net Worth" }].map(i => (
@@ -421,8 +452,40 @@ export default function Forecaster({ setPage }) {
                 ))}
               </div>
             )}
+            {showScenario && (
+              <div style={{ display: "flex", gap: 12, marginTop: 10, alignItems: "center", flexWrap: "wrap" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 10 }}><div style={{ width: 16, height: 2, background: accentColor, borderRadius: 1 }} /><span style={{ color: "rgba(240,237,230,0.45)" }}>Base scenario</span></div>
+                <div style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 10 }}><div style={{ width: 16, height: 2, background: "#5BA08A", borderRadius: 1, borderTop: "2px dashed #5BA08A" }} /><span style={{ color: "rgba(240,237,230,0.45)" }}>Scenario B</span><span style={{ color: "#5BA08A", fontWeight: 700, fontSize: 11 }}>{fmt(dataB[dataB.length-1]?.nw||0)}</span></div>
+                <span style={{ fontSize: 10, color: "#5BA08A" }}>+{fmt((dataB[dataB.length-1]?.nw||0)-(data[data.length-1]?.nw||0))} difference at retirement</span>
+              </div>
+            )}
           </div>
 
+          {/* Scenario B controls */}
+          {showScenario && (
+            <div style={{ background: "#142133", border: "1px solid #5BA08A33", borderRadius: 14, padding: "18px", marginBottom: 16 }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: "#5BA08A", marginBottom: 14 }}>Scenario B — adjust to compare</div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+                <div>
+                  <div style={{ fontSize: 10, color: "rgba(240,237,230,0.38)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 6 }}>Monthly savings</div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}><input type="range" min={0} max={5000} step={100} value={scenarioB.monthlySavings} onChange={e=>setScenarioB(p=>({...p,monthlySavings:+e.target.value}))} style={{ flex: 1, accentColor: "#5BA08A" }}/><span style={{ fontSize: 12, fontWeight: 700, minWidth: 65, textAlign: "right", color: "#5BA08A" }}>{fmt(scenarioB.monthlySavings)}/mo</span></div>
+                </div>
+                <div>
+                  <div style={{ fontSize: 10, color: "rgba(240,237,230,0.38)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 6 }}>Monthly super</div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}><input type="range" min={0} max={3000} step={50} value={scenarioB.superContrib} onChange={e=>setScenarioB(p=>({...p,superContrib:+e.target.value}))} style={{ flex: 1, accentColor: "#5BA08A" }}/><span style={{ fontSize: 12, fontWeight: 700, minWidth: 65, textAlign: "right", color: "#5BA08A" }}>{fmt(scenarioB.superContrib)}/mo</span></div>
+                </div>
+                <div>
+                  <div style={{ fontSize: 10, color: "rgba(240,237,230,0.38)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 6 }}>Investment return</div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}><input type="range" min={1} max={12} step={0.5} value={scenarioB.investReturn} onChange={e=>setScenarioB(p=>({...p,investReturn:+e.target.value}))} style={{ flex: 1, accentColor: "#5BA08A" }}/><span style={{ fontSize: 12, fontWeight: 700, minWidth: 32, textAlign: "right", color: "#5BA08A" }}>{scenarioB.investReturn}%</span></div>
+                </div>
+                <div style={{ background: "rgba(91,160,138,0.08)", border: "1px solid rgba(91,160,138,0.2)", borderRadius: 8, padding: "10px 12px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                  <div style={{ fontSize: 10, color: "rgba(240,237,230,0.35)", marginBottom: 3 }}>Scenario B at retirement</div>
+                  <div style={{ fontSize: 18, fontWeight: 800, color: "#5BA08A" }}>{fmt(dataB[dataB.length-1]?.nw||0)}</div>
+                  <div style={{ fontSize: 10, color: "#5BA08A" }}>+{fmt((dataB[dataB.length-1]?.nw||0)-(data[data.length-1]?.nw||0))} vs base</div>
+                </div>
+              </div>
+            </div>
+          )}
           {/* Percentile trajectory */}
           <div style={{ background: "#142133", border: "1px solid rgba(240,237,230,0.07)", borderRadius: 14, padding: "18px", marginBottom: 16 }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: "#F0EDE6", marginBottom: 14 }}>Percentile Trajectory</div>
