@@ -43,65 +43,6 @@ function WhatIf({nw,age,accent}){
     </div>
   </div>);
 }
-function Calculator(){
-  const [ht,setHt]=useState("individual");const [mode,setMode]=useState("quick");
-  const [form,setForm]=useState({age:"",assets:"",liabilities:"",cmp:"age"});
-  const [pa,setPa]=useState("");const [da,setDa]=useState({});const [dl,setDl]=useState({});
-  const [res,setRes]=useState(null);const [anim,setAnim]=useState(false);const [copied,setCopied]=useState(false);
-  const rref=useRef(null);
-  const sf=(k,v)=>setForm(f=>({...f,[k]:v}));
-  const DATA=ht==="couple"?AC:AI;const ea=ht==="couple"?Math.max(parseInt(form.age)||0,parseInt(pa)||0):parseInt(form.age)||0;
-  const ic=ht==="couple",acc=ic?"#7EB8D4":"#E8935A",sub=ic?"couple":"individual";
-  const tots=()=>{if(mode==="deep"){const a=AF.reduce((s,f)=>s+pm(da[f.key]||"0"),0),l=LF.reduce((s,f)=>s+pm(dl[f.key]||"0"),0);return{a,l};}return{a:pm(form.assets),l:pm(form.liabilities)};};
-  const calc=()=>{if(!form.age)return;if(ic&&!pa)return;const{a,l}=tots(),nw=a-l,g=ag(ea);const ad=DATA[g],all=DATA["all"];const apct=cp(nw,ad),alp=cp(nw,all);const ds=form.cmp==="age"?ad:all,pct=form.cmp==="age"?apct:alp;setRes({nw,a,l,g,apct,alp,pct,ms:nm(nw,ds),ad,all,ds,ht});setAnim(false);setTimeout(()=>{setAnim(true);rref.current?.scrollIntoView({behavior:"smooth",block:"start"});},100);};
-  const rcm=(m,r)=>{const ds=m==="age"?r.ad:r.all,pct=m==="age"?r.apct:r.alp;sf("cmp",m);setRes({...r,pct,ds,ms:nm(r.nw,ds)});setAnim(false);setTimeout(()=>setAnim(true),50);};
-  const share=()=>{const p=res?.pct,nw=res?.nw,ht=res?.ht;const params=new URLSearchParams({p,nw,ht,cmp:form.cmp,ag:ag(ea)});const url=window.location.origin+window.location.pathname+"?result="+btoa(params.toString());const txt=`I'm in the top ${100-p}% of Australian ${ic?"couples":"individuals"} by net worth. Where do you rank? ${url}`;if(navigator.share)navigator.share({title:"My Wealth Rank",text:txt,url});else{navigator.clipboard.writeText(txt);setCopied(true);setTimeout(()=>setCopied(false),2500);}};
-  const li=res?gl(res.pct):null;
-  const inp={width:"100%",background:"rgba(13,27,42,0.8)",border:"1px solid rgba(240,237,230,0.12)",borderRadius:10,padding:"12px 14px",color:"#F0EDE6",fontSize:14,outline:"none",boxSizing:"border-box"};
-  const slab={display:"block",fontSize:10,letterSpacing:"0.08em",textTransform:"uppercase",color:"rgba(240,237,230,0.4)",marginBottom:5,fontWeight:600};
-  const seg=(active,c="#E8935A")=>({flex:1,padding:"11px",border:"none",background:active?c+"22":"transparent",color:active?c:"rgba(240,237,230,0.45)",fontWeight:active?700:400,cursor:"pointer",fontSize:13,borderBottom:`2px solid ${active?c:"transparent"}`,transition:"all 0.2s"});
-  const tg=(active)=>({flex:1,padding:"10px",border:"none",background:active?acc:"transparent",color:active?"#0D1B2A":"rgba(240,237,230,0.5)",fontWeight:active?700:400,cursor:"pointer",fontSize:12,transition:"all 0.2s"});
-  return(<div style={{maxWidth:600,margin:"0 auto",padding:"0 24px"}}>
-    {!res&&(<div style={{background:"#142133",border:"1px solid rgba(240,237,230,0.08)",borderRadius:16,padding:"26px"}}>
-      <div style={{fontSize:10,letterSpacing:"0.1em",textTransform:"uppercase",color:"rgba(240,237,230,0.38)",marginBottom:8,fontWeight:600}}>Calculating for</div>
-      <div style={{display:"flex",background:"rgba(13,27,42,0.8)",border:"1px solid rgba(240,237,230,0.1)",borderRadius:12,overflow:"hidden",marginBottom:18}}><button style={seg(ht==="individual","#E8935A")} onClick={()=>{setHt("individual");setPa("");}}>Individual</button><button style={seg(ht==="couple","#7EB8D4")} onClick={()=>setHt("couple")}>Couple</button></div>
-      <div style={{fontSize:10,letterSpacing:"0.1em",textTransform:"uppercase",color:"rgba(240,237,230,0.38)",marginBottom:8,fontWeight:600}}>Detail level</div>
-      <div style={{display:"flex",background:"rgba(13,27,42,0.8)",border:"1px solid rgba(240,237,230,0.1)",borderRadius:12,overflow:"hidden",marginBottom:18}}><button style={seg(mode==="quick",acc)} onClick={()=>setMode("quick")}>Quick snapshot</button><button style={seg(mode==="deep",acc)} onClick={()=>setMode("deep")}>Deep dive</button></div>
-      {ic?(<div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,marginBottom:14}}><div><label style={slab}>Your Age</label><input style={inp} type="number" placeholder="34" value={form.age} onChange={e=>sf("age",e.target.value)}/></div><div><label style={slab}>Partner's Age</label><input style={inp} type="number" placeholder="32" value={pa} onChange={e=>setPa(e.target.value)}/></div></div>):(<div style={{marginBottom:14}}><label style={slab}>Your Age</label><input style={inp} type="number" placeholder="34" value={form.age} onChange={e=>sf("age",e.target.value)}/></div>)}
-      <div style={{display:"flex",alignItems:"center",gap:10,margin:"4px 0 14px",color:"rgba(240,237,230,0.16)",fontSize:11}}><div style={{flex:1,height:1,background:"rgba(240,237,230,0.07)"}}/><span>{ic?"combined ":""}{mode==="deep"?"itemised ":""}net worth</span><div style={{flex:1,height:1,background:"rgba(240,237,230,0.07)"}}/></div>
-      {mode==="quick"?(<div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,marginBottom:14}}><div><label style={slab}>Total Assets ($)</label><input style={inp} type="text" placeholder="650,000" value={form.assets} onChange={e=>sf("assets",e.target.value)}/><div style={{fontSize:9,color:"rgba(240,237,230,0.22)",marginTop:3}}>Property, super, savings, vehicles</div></div><div><label style={slab}>Total Liabilities ($)</label><input style={inp} type="text" placeholder="320,000" value={form.liabilities} onChange={e=>sf("liabilities",e.target.value)}/><div style={{fontSize:9,color:"rgba(240,237,230,0.22)",marginTop:3}}>Mortgage, HECS, loans, cards</div></div></div>):(
-        <div style={{marginBottom:14}}>
-          <div style={{fontSize:10,letterSpacing:"0.1em",textTransform:"uppercase",color:"rgba(240,237,230,0.3)",marginBottom:8}}>Assets</div>
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:14}}>{AF.map(f=><div key={f.key}><label style={slab}>{f.label}</label><input style={{...inp,padding:"8px 12px",fontSize:13}} type="text" placeholder="0" value={da[f.key]||""} onChange={e=>setDa(p=>({...p,[f.key]:e.target.value}))}/><div style={{fontSize:9,color:"rgba(240,237,230,0.2)",marginTop:2}}>{f.hint}</div></div>)}</div>
-          <div style={{fontSize:10,letterSpacing:"0.1em",textTransform:"uppercase",color:"rgba(240,237,230,0.3)",marginBottom:8}}>Liabilities</div>
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>{LF.map(f=><div key={f.key}><label style={slab}>{f.label}</label><input style={{...inp,padding:"8px 12px",fontSize:13}} type="text" placeholder="0" value={dl[f.key]||""} onChange={e=>setDl(p=>({...p,[f.key]:e.target.value}))}/><div style={{fontSize:9,color:"rgba(240,237,230,0.2)",marginTop:2}}>{f.hint}</div></div>)}</div>
-        </div>
-      )}
-      <div style={{marginBottom:16}}><div style={{fontSize:10,letterSpacing:"0.08em",textTransform:"uppercase",color:"rgba(240,237,230,0.38)",marginBottom:7,fontWeight:600}}>Compare against</div><div style={{display:"flex",background:"rgba(13,27,42,0.8)",border:"1px solid rgba(240,237,230,0.1)",borderRadius:10,overflow:"hidden"}}><button style={tg(form.cmp==="age")} onClick={()=>sf("cmp","age")}>{ic?"Couples our age":"Australians my age"}</button><button style={tg(form.cmp==="all")} onClick={()=>sf("cmp","all")}>All Australian {ic?"couples":"individuals"}</button></div></div>
-      <button style={{width:"100%",padding:"14px",background:acc,color:"#0D1B2A",border:"none",borderRadius:10,fontSize:15,fontWeight:700,cursor:"pointer"}} onClick={calc}>Calculate {ic?"Our":"My"} Rank →</button>
-    </div>)}
-    {res&&(<div ref={rref}>
-      <div style={{textAlign:"center",padding:"36px 0 22px"}}>
-        <div style={{fontSize:10,color:"rgba(240,237,230,0.28)",letterSpacing:"0.12em",textTransform:"uppercase",marginBottom:5}}>{res.ht==="couple"?"Couple":"Individual"}</div>
-        <div style={{display:"inline-block",background:li.color+"22",color:li.color,border:`1px solid ${li.color}44`,borderRadius:6,padding:"3px 10px",fontSize:11,fontWeight:700,letterSpacing:"0.06em",textTransform:"uppercase",marginBottom:4}}>{li.label}</div>
-        <div style={{fontSize:"clamp(56px,12vw,96px)",fontWeight:900,lineHeight:1,letterSpacing:"-0.03em",color:acc}}>{res.pct}<span style={{fontSize:"0.38em",fontWeight:400,opacity:0.55}}>th</span></div>
-        <div style={{fontSize:15,color:"rgba(240,237,230,0.6)",marginTop:4,marginBottom:22}}>percentile — ahead of <strong style={{color:"#F0EDE6"}}>{res.pct}%</strong> of {form.cmp==="age"?`Australian ${sub}s aged ${res.ad.label.toLowerCase()}`:`all Australian ${sub}s`}</div>
-      </div>
-      <div style={{background:"#142133",border:"1px solid rgba(240,237,230,0.07)",borderRadius:14,padding:"20px 12px 8px",marginBottom:16}}><div style={{fontSize:10,letterSpacing:"0.1em",textTransform:"uppercase",color:"rgba(240,237,230,0.28)",marginBottom:8,paddingLeft:4}}>Wealth Distribution — {form.cmp==="age"?res.ad.label:`All Australian ${sub}s`}</div><Bell percentile={res.pct} animated={anim} color={acc}/></div>
-      <div style={{display:"flex",gap:8,marginBottom:16}}>{["age","all"].map(m=><button key={m} onClick={()=>rcm(m,res)} style={{flex:1,padding:"8px",border:`1px solid ${form.cmp===m?acc+"88":"rgba(240,237,230,0.09)"}`,background:form.cmp===m?acc+"14":"transparent",color:form.cmp===m?acc:"rgba(240,237,230,0.38)",borderRadius:8,fontSize:12,fontWeight:form.cmp===m?700:400,cursor:"pointer"}}>{m==="age"?`vs. ${sub}s my age`:`vs. all Australian ${sub}s`}</button>)}</div>
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:16}}>
-        <div style={{background:"#142133",border:"1px solid rgba(240,237,230,0.07)",borderRadius:12,padding:"16px"}}><div style={{fontSize:9,letterSpacing:"0.1em",textTransform:"uppercase",color:"rgba(240,237,230,0.32)",marginBottom:4}}>{ic?"Combined":"Your"} Net Worth</div><div style={{fontSize:19,fontWeight:700}}>{res.nw<0?"-":""}{fmt(Math.abs(res.nw))}</div></div>
-        <div style={{background:"#142133",border:"1px solid rgba(240,237,230,0.07)",borderRadius:12,padding:"16px"}}><div style={{fontSize:9,letterSpacing:"0.1em",textTransform:"uppercase",color:"rgba(240,237,230,0.32)",marginBottom:4}}>Median for {form.cmp==="age"?`${sub}s your age`:"AU "+sub+"s"}</div><div style={{fontSize:19,fontWeight:700}}>{fmt(res.ds.median)}</div></div>
-        <div style={{background:"#142133",border:"1px solid rgba(240,237,230,0.07)",borderRadius:12,padding:"16px"}}><div style={{fontSize:9,letterSpacing:"0.1em",textTransform:"uppercase",color:"rgba(240,237,230,0.32)",marginBottom:4}}>Total Assets</div><div style={{fontSize:19,fontWeight:700,color:"#5BA08A"}}>{fmt(res.a)}</div></div>
-        <div style={{background:"#142133",border:"1px solid rgba(240,237,230,0.07)",borderRadius:12,padding:"16px"}}><div style={{fontSize:9,letterSpacing:"0.1em",textTransform:"uppercase",color:"rgba(240,237,230,0.32)",marginBottom:4}}>Total Liabilities</div><div style={{fontSize:19,fontWeight:700,color:"#E8935A"}}>{fmt(res.l)}</div></div>
-      </div>
-      <WhatIf nw={res.nw} age={form.age} accent={acc}/>
-      {res.ms&&<div style={{background:"linear-gradient(135deg,#1a2e42,#142133)",border:`1px solid ${acc}35`,borderRadius:12,padding:"18px",marginBottom:16}}><div style={{fontSize:9,letterSpacing:"0.1em",textTransform:"uppercase",color:acc+"aa",marginBottom:6}}>Next milestone</div><div style={{fontSize:15,fontWeight:700,marginBottom:5}}>Reach the {res.ms.p}th percentile</div><div style={{fontSize:13,color:"rgba(240,237,230,0.55)",lineHeight:1.65}}>An additional <strong style={{color:"#F0EDE6"}}>{fmt(res.ms.gap)}</strong> puts you in the top {100-res.ms.p}% of {form.cmp==="age"?`Australian ${sub}s aged ${res.ad.label.toLowerCase()}`:`all Australian ${sub}s`}. That's a {ic?"combined ":""}net worth of <strong style={{color:"#F0EDE6"}}>{fmt(res.ms.amt)}</strong>.</div></div>}
-      <button style={{width:"100%",padding:"12px",background:"transparent",color:acc,border:`2px solid ${acc}`,borderRadius:10,fontSize:14,fontWeight:700,cursor:"pointer",marginBottom:8}} onClick={share}>{copied?"✓ Copied!":"Share my result"}</button>
-      <button style={{width:"100%",padding:"10px",background:"transparent",color:"rgba(240,237,230,0.3)",border:"1px solid rgba(240,237,230,0.09)",borderRadius:10,fontSize:12,cursor:"pointer"}} onClick={()=>setRes(null)}>← Recalculate</button>
-    </div>)}
-  </div>);
-}
 function Nav({page,setPage}){
   const [open,setOpen]=useState(false);
   const pages=[{id:"home",l:"Home"},{id:"calculator",l:"Calculator"},{id:"forecast",l:"Forecaster"},{id:"income",l:"Income"},{id:"gen",l:"By Generation"},{id:"insights",l:"Insights"},{id:"about",l:"About the Data"}];
@@ -165,9 +106,23 @@ function Home({setPage}){
         {[{n:"1",t:"Enter your numbers",b:"Age, assets, liabilities. Under a minute. Nothing stored."},{n:"2",t:"See your percentile",b:"Compare against Australians your age or all Australians."},{n:"3",t:"Understand your position",b:"Milestone, super check, and a growth simulator."}].map(s=>(<div key={s.n}><div style={{width:30,height:30,borderRadius:7,background:"rgba(232,147,90,0.1)",border:"1px solid rgba(232,147,90,0.22)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:800,color:"#E8935A",margin:"0 auto 10px"}}>{s.n}</div><div style={{fontSize:12,fontWeight:700,marginBottom:4}}>{s.t}</div><div style={{fontSize:11,color:"rgba(240,237,230,0.4)",lineHeight:1.6}}>{s.b}</div></div>))}
       </div>
     </div>
-    <div ref={calcRef} style={{padding:"52px 0 0"}}>
-      <div style={{textAlign:"center",marginBottom:28,padding:"0 24px"}}><div style={{fontSize:10,letterSpacing:"0.16em",textTransform:"uppercase",color:"#E8935A",marginBottom:7,fontWeight:600}}>The Calculator</div><h2 style={{fontSize:"clamp(20px,4vw,34px)",fontWeight:800,letterSpacing:"-0.02em",margin:0}}>Find your percentile</h2></div>
-      <Calculator/>
+    <div ref={calcRef} style={{padding:"52px 24px 0",maxWidth:600,margin:"0 auto"}}>
+      <div style={{textAlign:"center",marginBottom:28}}>
+        <div style={{fontSize:10,letterSpacing:"0.16em",textTransform:"uppercase",color:"#E8935A",marginBottom:7,fontWeight:600}}>The Calculator</div>
+        <h2 style={{fontSize:"clamp(20px,4vw,34px)",fontWeight:800,letterSpacing:"-0.02em",margin:"0 0 10px"}}>Find your percentile</h2>
+        <p style={{fontSize:14,color:"rgba(240,237,230,0.42)",lineHeight:1.65,maxWidth:420,margin:"0 auto"}}>Compare your net worth against real Australian wealth data — by age, household type, and percentile.</p>
+      </div>
+      <div style={{background:"#142133",border:"1px solid rgba(240,237,230,0.08)",borderRadius:16,padding:"32px",textAlign:"center"}}>
+        <div style={{display:"flex",justifyContent:"center",gap:8,marginBottom:20,flexWrap:"wrap"}}>
+          {[{l:"Individual & Couple",c:"#E8935A"},{l:"Quick or Deep Dive",c:"#7EB8D4"},{l:"Age-adjusted data",c:"#5BA08A"}].map(b=>(
+            <div key={b.l} style={{background:b.c+"14",color:b.c,border:`1px solid ${b.c}28`,borderRadius:20,padding:"4px 12px",fontSize:11,fontWeight:600}}>{b.l}</div>
+          ))}
+        </div>
+        <button onClick={()=>setPage("calculator")} style={{padding:"14px 36px",background:"#E8935A",color:"#0D1B2A",border:"none",borderRadius:10,fontSize:15,fontWeight:700,cursor:"pointer",letterSpacing:"0.01em"}}>
+          Calculate My Rank →
+        </button>
+        <div style={{fontSize:11,color:"rgba(240,237,230,0.28)",marginTop:12}}>Free · No sign-up · ABS 2021–22 data</div>
+      </div>
     </div>
     <SourceTicker setPage={setPage}/>
     <div style={{maxWidth:600,margin:"60px auto 0",padding:"0 24px"}}>
