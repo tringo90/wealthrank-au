@@ -94,7 +94,6 @@ function AssetBar({assets,liabilities}){
         </div>
       </div>}
     </div>
-    <PageFooter setPage={setPage}/>
   );
 }
 
@@ -448,5 +447,6 @@ export default function Calculator({ setPage }) {
         )}
       </div>
     </div>
+    <PageFooter setPage={setPage}/>
   );
 }
