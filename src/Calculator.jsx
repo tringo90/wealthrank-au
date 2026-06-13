@@ -448,5 +448,7 @@ export default function Calculator({ setPage }) {
       </div>
     </div>
     <PageFooter setPage={setPage}/>
+  </div>
   );
 }
+
