@@ -45,7 +45,7 @@ function WhatIf({nw,age,accent}){
 }
 function Nav({page,setPage}){
   const [open,setOpen]=useState(false);
-  const pages=[{id:"home",l:"Home"},{id:"calculator",l:"Calculator"},{id:"forecast",l:"Forecaster"},{id:"income",l:"Income"},{id:"gen",l:"By Generation"},{id:"insights",l:"Insights"},{id:"about",l:"About the Data"}];
+  const pages=[{id:"home",l:"Home"},{id:"calculator",l:"Net Worth"},{id:"forecast",l:"Forecaster"},{id:"income",l:"Income"},{id:"gen",l:"By Generation"},{id:"insights",l:"Insights"},{id:"about",l:"About the Data"}];
   return(<nav style={{position:"sticky",top:0,zIndex:100,background:"rgba(13,27,42,0.96)",backdropFilter:"blur(12px)",borderBottom:"1px solid rgba(240,237,230,0.07)",padding:"0 20px",display:"flex",alignItems:"center",justifyContent:"space-between",height:56}}>
     <div style={{fontWeight:800,fontSize:15,letterSpacing:"-0.01em",cursor:"pointer",display:"flex",alignItems:"center",gap:7}} onClick={()=>setPage("home")}>
       Wealth<span style={{color:"#E8935A"}}>Rank</span><span style={{fontSize:10,color:"rgba(240,237,230,0.3)",marginLeft:3,fontWeight:400}}>AU</span>
@@ -103,7 +103,7 @@ function Home({setPage}){
     </div>
     <div style={{background:"#0f1e2d",borderTop:"1px solid rgba(240,237,230,0.05)",borderBottom:"1px solid rgba(240,237,230,0.05)",padding:"48px 24px"}}>
       <div style={{maxWidth:580,margin:"0 auto",display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:16,textAlign:"center"}}>
-        {[{n:"1",t:"Enter your numbers",b:"Age, assets, liabilities. Under a minute. Nothing stored."},{n:"2",t:"See your percentile",b:"Compare against Australians your age or all Australians."},{n:"3",t:"Understand your position",b:"Milestone, super check, and a growth simulator."}].map(s=>(<div key={s.n}><div style={{width:30,height:30,borderRadius:7,background:"rgba(232,147,90,0.1)",border:"1px solid rgba(232,147,90,0.22)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:800,color:"#E8935A",margin:"0 auto 10px"}}>{s.n}</div><div style={{fontSize:12,fontWeight:700,marginBottom:4}}>{s.t}</div><div style={{fontSize:11,color:"rgba(240,237,230,0.4)",lineHeight:1.6}}>{s.b}</div></div>))}
+        {[{n:"1",t:"Enter your numbers",b:"Age, assets, liabilities. Under a minute. Nothing stored."},{n:"2",t:"See your percentile",b:"Compare against Australians your age or all Australians."},{n:"3",t:"Understand your position",b:"Milestone, super check, and a growth simulator."}].map(s=>(<div key={s.n}><div style={{width:30,height:30,borderRadius:7,background:"rgba(232,147,90,0.1)",border:"1px solid rgba(232,147,90,0.22)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:800,color:"#E8935A",margin:"0 auto 10px"}}>{s.n}</div><div style={{fontSize:12,fontWeight:700,marginBottom:4,color:"#F0EDE6"}}>{s.t}</div><div style={{fontSize:11,color:"rgba(240,237,230,0.4)",lineHeight:1.6}}>{s.b}</div></div>))}
       </div>
     </div>
     <div ref={calcRef} style={{padding:"52px 24px 0",maxWidth:600,margin:"0 auto"}}>
@@ -115,7 +115,7 @@ function Home({setPage}){
       <div style={{background:"#142133",border:"1px solid rgba(240,237,230,0.08)",borderRadius:16,padding:"32px",textAlign:"center"}}>
         <div style={{display:"flex",justifyContent:"center",gap:8,marginBottom:20,flexWrap:"wrap"}}>
           {[{l:"Individual & Couple",c:"#E8935A"},{l:"Quick or Deep Dive",c:"#7EB8D4"},{l:"Age-adjusted data",c:"#5BA08A"}].map(b=>(
-            <div key={b.l} style={{background:b.c+"14",color:b.c,border:`1px solid ${b.c}28`,borderRadius:20,padding:"4px 12px",fontSize:11,fontWeight:600}}>{b.l}</div>
+            <div key={b.l} style={{background:b.c+"14",color:b.c,border:`1px solid ${b.c}28`,borderRadius:20,padding:"4px 12px",fontSize:11,fontWeight:600,color:b.c}}>{b.l}</div>
           ))}
         </div>
         <button onClick={()=>setPage("calculator")} style={{padding:"14px 36px",background:"#E8935A",color:"#0D1B2A",border:"none",borderRadius:10,fontSize:15,fontWeight:700,cursor:"pointer",letterSpacing:"0.01em"}}>
@@ -128,7 +128,7 @@ function Home({setPage}){
     <div style={{maxWidth:600,margin:"60px auto 0",padding:"0 24px"}}>
       <div style={{fontSize:10,letterSpacing:"0.14em",textTransform:"uppercase",color:"rgba(240,237,230,0.24)",marginBottom:14,textAlign:"center"}}>Also explore</div>
       <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(170px,1fr))",gap:10}}>
-        {[{id:"calculator",t:"Net Worth Calculator",d:"Where does your net worth rank against other Australians?",c:"#E8935A"},{id:"income",t:"Income Calculator",d:"Where does your salary rank against other Australians?",c:"#5BA08A"},{id:"gen",t:"Wealth by Generation",d:"How Millennials, Gen X and Boomers compare.",c:"#7EB8D4"},{id:"forecast",t:"Wealth Forecaster",d:"Project your net worth to retirement with life events.",c:"#A78BD4"},{id:"insights",t:"Insights",d:"Data-driven articles on Australian wealth and super.",c:"#E8C05A"},{id:"about",t:"About the Data",d:"Where the numbers come from and what they mean.",c:"#5BA08A"}].map(p=>(<button key={p.id} onClick={()=>setPage(p.id)} style={{background:"#142133",border:`1px solid ${p.c}1a`,borderRadius:12,padding:"18px",textAlign:"left",cursor:"pointer"}}><div style={{width:24,height:2,background:p.c,borderRadius:2,marginBottom:10}}/><div style={{fontSize:13,fontWeight:700,marginBottom:4}}>{p.t}</div><div style={{fontSize:11,color:"rgba(240,237,230,0.38)",lineHeight:1.55,marginBottom:8}}>{p.d}</div><div style={{fontSize:11,color:p.c,fontWeight:600}}>View →</div></button>))}
+        {[{id:"calculator",t:"Net Worth Calculator",d:"Where does your net worth rank against other Australians?",c:"#E8935A"},{id:"income",t:"Income Calculator",d:"Where does your salary rank against other Australians?",c:"#5BA08A"},{id:"gen",t:"Wealth by Generation",d:"How Millennials, Gen X and Boomers compare.",c:"#7EB8D4"},{id:"forecast",t:"Wealth Forecaster",d:"Project your net worth to retirement with life events.",c:"#A78BD4"},{id:"insights",t:"Insights",d:"Data-driven articles on Australian wealth and super.",c:"#E8C05A"},{id:"about",t:"About the Data",d:"Where the numbers come from and what they mean.",c:"#5BA08A"}].map(p=>(<button key={p.id} onClick={()=>setPage(p.id)} style={{background:"#142133",border:`1px solid ${p.c}1a`,borderRadius:12,padding:"18px",textAlign:"left",cursor:"pointer",color:"#F0EDE6"}}><div style={{width:24,height:2,background:p.c,borderRadius:2,marginBottom:10}}/><div style={{fontSize:13,fontWeight:700,marginBottom:4,color:"#F0EDE6"}}>{p.t}</div><div style={{fontSize:11,color:"rgba(240,237,230,0.38)",lineHeight:1.55,marginBottom:8}}>{p.d}</div><div style={{fontSize:11,color:p.c,fontWeight:600}}>View →</div></button>))}
       </div>
     </div>
     <Footer setPage={setPage}/>
