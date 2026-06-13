@@ -196,7 +196,7 @@ export default function Income({ setPage }) {
   const tg = (active) => ({flex:1,padding:"10px",border:"none",background:active?accent:"transparent",color:active?"#0D1B2A":"rgba(240,237,230,0.5)",fontWeight:active?700:400,cursor:"pointer",fontSize:12,transition:"all 0.2s"});
 
   return (
-    <div style={{paddingBottom:0}}>
+    <>
       <div style={{textAlign:"center",padding:"52px 24px 40px",borderBottom:"1px solid rgba(240,237,230,0.06)"}}>
         <div style={{fontSize:10,letterSpacing:"0.18em",textTransform:"uppercase",color:accent,marginBottom:10,fontWeight:600}}>Australian Wealth Index</div>
         <h1 style={{fontSize:"clamp(24px,5vw,48px)",fontWeight:800,lineHeight:1.05,letterSpacing:"-0.02em",margin:"0 0 10px"}}>Income Percentile Calculator</h1>
@@ -305,5 +305,6 @@ export default function Income({ setPage }) {
       </div>
     </div>
     <PageFooter setPage={setPage}/>
+  </>
   );
 }
