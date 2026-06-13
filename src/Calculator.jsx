@@ -45,8 +45,15 @@ function Bell({percentile,animated,color="#E8935A"}){
     ctx.strokeStyle=color;ctx.lineWidth=2;ctx.setLineDash([4,3]);ctx.stroke();ctx.setLineDash([]);
     // YOU pin
     const pinW=32,pinH=18,pinX=mX-pinW/2,pinY=mY-14-pinH-4;
+    // YOU pin background — manually draw rounded rect for browser compatibility
     ctx.beginPath();
-    ctx.roundRect?ctx.roundRect(pinX,pinY,pinW,pinH,4):ctx.rect(pinX,pinY,pinW,pinH);
+    const r=4;
+    ctx.moveTo(pinX+r,pinY);
+    ctx.lineTo(pinX+pinW-r,pinY);ctx.arcTo(pinX+pinW,pinY,pinX+pinW,pinY+r,r);
+    ctx.lineTo(pinX+pinW,pinY+pinH-r);ctx.arcTo(pinX+pinW,pinY+pinH,pinX+pinW-r,pinY+pinH,r);
+    ctx.lineTo(pinX+r,pinY+pinH);ctx.arcTo(pinX,pinY+pinH,pinX,pinY+pinH-r,r);
+    ctx.lineTo(pinX,pinY+r);ctx.arcTo(pinX,pinY,pinX+r,pinY,r);
+    ctx.closePath();
     ctx.fillStyle=color;ctx.fill();
     ctx.fillStyle="#0D1B2A";ctx.font="bold 9px system-ui";ctx.textAlign="center";
     ctx.fillText("YOU",mX,pinY+12);
