@@ -285,7 +285,7 @@ function PageFooter({setPage}){
         <div style={{borderTop:"1px solid rgba(240,237,230,0.05)",paddingTop:16,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
           <div style={{fontSize:10,color:"rgba(240,237,230,0.18)"}}>© 2026 WealthRank AU. For informational purposes only. Not financial advice.</div>
           <div style={{display:"flex",alignItems:"center",gap:10}}>
-            <div style={{fontSize:10,color:"rgba(240,237,230,0.18)"}}>Data: ABS 2021–22 · ASFA 2023–24</div>
+            <div style={{fontSize:10,color:"rgba(240,237,230,0.18)"}}>Data: ABS · ASFA</div>
             <div style={{fontSize:9,background:"rgba(91,160,138,0.12)",color:"#5BA08A",border:"1px solid rgba(91,160,138,0.2)",borderRadius:4,padding:"2px 5px",fontWeight:600}}>v1.4</div>
           </div>
         </div>
@@ -349,6 +349,12 @@ export default function Forecaster({ setPage }) {
 
   return (
     <div style={{ paddingBottom: 0 }}>
+      {/* Breadcrumb */}
+      <div style={{ maxWidth: 900, margin: "0 auto", padding: "12px 24px 0" }}>
+        <button onClick={() => setPage("tools")} style={{ background: "none", border: "none", color: "rgba(240,237,230,0.35)", fontSize: 12, cursor: "pointer", padding: 0, display: "flex", alignItems: "center", gap: 5 }}>
+          <span style={{ fontSize: 14, lineHeight: 1 }}>‹</span> All Tools
+        </button>
+      </div>
       {/* Hero */}
       <div style={{ textAlign: "center", padding: "52px 24px 40px", borderBottom: "1px solid rgba(240,237,230,0.06)" }}>
         <div style={{ fontSize: 10, letterSpacing: "0.18em", textTransform: "uppercase", color: accentColor, marginBottom: 10, fontWeight: 600 }}>Australian Wealth Index</div>
@@ -588,7 +594,7 @@ export default function Forecaster({ setPage }) {
           <div style={{ background: "linear-gradient(135deg,#1a2e42,#142133)", border: `1px solid ${accentColor}22`, borderRadius: 14, padding: "24px", textAlign: "center", marginBottom: 32 }}>
             <div style={{ fontSize: 15, fontWeight: 700, marginBottom: 5 }}>See where you rank right now</div>
             <div style={{ fontSize: 12, color: "rgba(240,237,230,0.4)", marginBottom: 16 }}>The calculator shows your current percentile against other Australians.</div>
-            <button onClick={() => setPage("home")} style={{ padding: "12px 24px", background: accentColor, color: "#0D1B2A", border: "none", borderRadius: 10, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>Go to the Calculator →</button>
+            <button onClick={() => setPage("home")} style={{ padding: "12px 24px", background: accentColor, color: "#0D1B2A", border: "none", borderRadius: 10, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>Go to the Calculator</button>
           </div>
         </div>
       </div>

@@ -118,7 +118,7 @@ function Footer({setPage}){
         <div style={{borderTop:"1px solid rgba(240,237,230,0.05)",paddingTop:16,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
           <div style={{fontSize:10,color:"rgba(240,237,230,0.18)"}}>© 2026 WealthRank AU. For informational purposes only. Not financial advice.</div>
           <div style={{display:"flex",alignItems:"center",gap:10}}>
-            <div style={{fontSize:10,color:"rgba(240,237,230,0.18)"}}>Data: ABS 2021–22 · ASFA 2023–24</div>
+            <div style={{fontSize:10,color:"rgba(240,237,230,0.18)"}}>Data: ABS · ASFA</div>
             <div style={{fontSize:9,background:"rgba(91,160,138,0.12)",color:"#5BA08A",border:"1px solid rgba(91,160,138,0.2)",borderRadius:4,padding:"2px 5px",fontWeight:600}}>v1.4</div>
           </div>
         </div>
@@ -188,11 +188,18 @@ export default function Calculator({setPage}){
   return (
     <div style={{minHeight:"100vh",background:"#0D1B2A",color:"#F0EDE6",fontFamily:"'Inter',system-ui,sans-serif"}}>
 
+      {/* Breadcrumb */}
+      <div style={{maxWidth:900,margin:"0 auto",padding:"12px 24px 0"}}>
+        <button onClick={()=>setPage("tools")} style={{background:"none",border:"none",color:"rgba(240,237,230,0.35)",fontSize:12,cursor:"pointer",padding:0,display:"flex",alignItems:"center",gap:5}}>
+          <span style={{fontSize:14,lineHeight:1}}>‹</span> All Tools
+        </button>
+      </div>
+
       {/* Hero */}
       <div style={{borderBottom:"1px solid rgba(240,237,230,0.06)",padding:"44px 24px 36px"}}>
         <div style={{maxWidth:900,margin:"0 auto"}}>
           <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:14}}>
-            <div style={{background:"rgba(232,147,90,0.12)",border:"1px solid rgba(232,147,90,0.25)",borderRadius:6,padding:"3px 10px",fontSize:10,fontWeight:700,letterSpacing:"0.1em",textTransform:"uppercase",color:"#E8935A"}}>ABS 2021–22</div>
+            <div style={{background:"rgba(232,147,90,0.12)",border:"1px solid rgba(232,147,90,0.25)",borderRadius:6,padding:"3px 10px",fontSize:10,fontWeight:700,letterSpacing:"0.1em",textTransform:"uppercase",color:"#E8935A"}}>ABS</div>
             <div style={{background:"rgba(91,160,138,0.1)",border:"1px solid rgba(91,160,138,0.22)",borderRadius:6,padding:"3px 10px",fontSize:10,fontWeight:700,letterSpacing:"0.1em",textTransform:"uppercase",color:"#5BA08A"}}>FREE</div>
             <div style={{background:"rgba(240,237,230,0.06)",border:"1px solid rgba(240,237,230,0.12)",borderRadius:6,padding:"3px 10px",fontSize:10,fontWeight:700,letterSpacing:"0.1em",textTransform:"uppercase",color:"rgba(240,237,230,0.4)"}}>NO SIGN-UP</div>
           </div>
@@ -255,11 +262,11 @@ export default function Calculator({setPage}){
                   </div>
                 </div>
                 <button style={{width:"100%",padding:"13px",background:acc,color:"#0D1B2A",border:"none",borderRadius:8,fontSize:15,fontWeight:700,cursor:"pointer"}} onClick={calc}>
-                  Calculate {ic?"Our":"My"} Rank →
+                  Calculate {ic?"Our":"My"} Rank
                 </button>
               </div>
               <div style={{marginTop:12,display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
-                {[{l:"Median AU net worth",v:"$350K"},{l:"Data source",v:"ABS 2021–22"}].map(s=>(
+                {[{l:"Median AU net worth",v:"$350K"},{l:"Data source",v:"ABS"}].map(s=>(
                   <div key={s.l} style={{background:"#142133",border:"1px solid rgba(240,237,230,0.06)",borderRadius:10,padding:"10px 12px"}}>
                     <div style={{fontSize:9,color:"rgba(240,237,230,0.3)",textTransform:"uppercase",letterSpacing:"0.07em",marginBottom:3}}>{s.l}</div>
                     <div style={{fontSize:13,fontWeight:700,color:"#F0EDE6"}}>{s.v}</div>
@@ -338,16 +345,16 @@ export default function Calculator({setPage}){
               <button onClick={()=>setPage("gen")} style={{background:"linear-gradient(135deg,#1a2e42,#0f1e2d)",border:"1px solid rgba(240,237,230,0.07)",borderRadius:14,padding:"20px",textAlign:"left",cursor:"pointer"}}>
                 <div style={{fontSize:13,fontWeight:700,color:"#F0EDE6",marginBottom:4}}>How you compare by age</div>
                 <div style={{fontSize:11,color:"rgba(240,237,230,0.4)",lineHeight:1.5,marginBottom:10}}>See how wealth varies across generations</div>
-                <div style={{fontSize:10,color:"#7EB8D4",fontWeight:600,letterSpacing:"0.06em",textTransform:"uppercase"}}>Explore cohorts →</div>
+                <div style={{fontSize:10,color:"#7EB8D4",fontWeight:600,letterSpacing:"0.06em",textTransform:"uppercase"}}>Explore cohorts</div>
               </button>
               <button onClick={()=>setPage("forecast")} style={{background:"linear-gradient(135deg,#1a2442,#0f1e2d)",border:"1px solid rgba(240,237,230,0.07)",borderRadius:14,padding:"20px",textAlign:"left",cursor:"pointer"}}>
                 <div style={{fontSize:13,fontWeight:700,color:"#F0EDE6",marginBottom:4}}>Wealth Forecaster</div>
                 <div style={{fontSize:11,color:"rgba(240,237,230,0.4)",lineHeight:1.5,marginBottom:10}}>Project your net worth to retirement</div>
-                <div style={{fontSize:10,color:"#A78BD4",fontWeight:600,letterSpacing:"0.06em",textTransform:"uppercase"}}>Simulate growth →</div>
+                <div style={{fontSize:10,color:"#A78BD4",fontWeight:600,letterSpacing:"0.06em",textTransform:"uppercase"}}>Simulate growth</div>
               </button>
             </div>
             <div style={{textAlign:"center",fontSize:9,color:"rgba(240,237,230,0.15)",marginBottom:32,letterSpacing:"0.05em"}}>
-              DATA: ABS 2021–22 · FOR INFORMATIONAL USE ONLY · NOT FINANCIAL ADVICE
+              DATA: ABS · FOR INFORMATIONAL USE ONLY · NOT FINANCIAL ADVICE
             </div>
           </div>
         )}
