@@ -4,6 +4,9 @@ import Income from "./Income.jsx";
 import Calculator from "./Calculator.jsx";
 import SuperChecker from "./SuperChecker.jsx";
 import FireCalc from "./FireCalc.jsx";
+import { BackgroundPaths } from "./components/ui/background-paths";
+import { Header } from "./components/ui/header-2";
+import { HowItWorks } from "./components/ui/how-it-works";
 const AI={all:{label:"All Australians",percentiles:{10:13000,20:55000,30:130000,40:220000,50:350000,60:520000,70:730000,80:1050000,90:1650000,95:2500000,99:5200000},median:350000},"18-24":{label:"Ages 18–24",percentiles:{10:1000,20:5000,30:12000,40:22000,50:35000,60:55000,70:85000,80:130000,90:210000,95:320000,99:650000},median:35000},"25-34":{label:"Ages 25–34",percentiles:{10:5000,20:22000,30:50000,40:90000,50:145000,60:220000,70:330000,80:490000,90:750000,95:1100000,99:2200000},median:145000},"35-44":{label:"Ages 35–44",percentiles:{10:15000,20:65000,30:145000,40:260000,50:420000,60:620000,70:870000,80:1200000,90:1850000,95:2700000,99:5000000},median:420000},"45-54":{label:"Ages 45–54",percentiles:{10:20000,20:90000,30:210000,40:380000,50:620000,60:900000,70:1250000,80:1750000,90:2700000,95:3900000,99:7500000},median:620000},"55-64":{label:"Ages 55–64",percentiles:{10:25000,20:110000,30:270000,40:490000,50:790000,60:1150000,70:1600000,80:2200000,90:3300000,95:4800000,99:9000000},median:790000},"65+":{label:"Ages 65+",percentiles:{10:50000,20:180000,30:380000,40:620000,50:900000,60:1250000,70:1700000,80:2350000,90:3500000,95:5000000,99:9500000},median:900000}};
 const AC={all:{label:"All Australian Couples",percentiles:{10:85000,20:220000,30:420000,40:680000,50:1000000,60:1400000,70:1900000,80:2700000,90:4100000,95:6000000,99:11500000},median:1000000},"18-24":{label:"Ages 18–24",percentiles:{10:8000,20:25000,30:60000,40:110000,50:180000,60:280000,70:420000,80:620000,90:950000,95:1400000,99:2800000},median:180000},"25-34":{label:"Ages 25–34",percentiles:{10:20000,20:75000,30:180000,40:330000,50:530000,60:780000,70:1100000,80:1550000,90:2400000,95:3500000,99:6500000},median:530000},"35-44":{label:"Ages 35–44",percentiles:{10:50000,20:200000,30:450000,40:780000,50:1200000,60:1700000,70:2300000,80:3100000,90:4800000,95:7000000,99:13000000},median:1200000},"45-54":{label:"Ages 45–54",percentiles:{10:70000,20:270000,30:600000,40:1050000,50:1650000,60:2300000,70:3100000,80:4300000,90:6500000,95:9500000,99:18000000},median:1650000},"55-64":{label:"Ages 55–64",percentiles:{10:90000,20:350000,30:800000,40:1400000,50:2100000,60:2900000,70:3900000,80:5400000,90:8000000,95:11500000,99:21000000},median:2100000},"65+":{label:"Ages 65+",percentiles:{10:150000,20:500000,30:1000000,40:1650000,50:2400000,60:3300000,70:4400000,80:6000000,90:9000000,95:13000000,99:24000000},median:2400000}};
 const AF=[{key:"property",label:"Property",hint:"Home + investment properties"},{key:"super",label:"Super",hint:"Combined balance"},{key:"shares",label:"Shares/ETFs",hint:"ASX, funds, crypto"},{key:"cash",label:"Cash",hint:"Bank, term deposits"},{key:"vehicle",label:"Vehicles",hint:"Cars, boats"},{key:"other_a",label:"Other Assets",hint:"Business, collectibles"}];
@@ -17,7 +20,7 @@ function pm(s){return parseFloat(String(s).replace(/,/g,""))||0;}
 function nm(nw,ds){const p=ds.percentiles,k=[10,20,30,40,50,60,70,80,90,95,99];for(const x of k)if(nw<p[x])return{p:x,amt:p[x],gap:p[x]-nw};return null;}
 function fmt(n){if(n>=1000000)return"$"+(n/1000000).toFixed(1)+"M";if(n>=1000)return"$"+Math.round(n/1000)+"K";return"$"+n.toLocaleString("en-AU");}
 function SourceBadge({s}){return(<div style={{flexShrink:0,width:200,boxSizing:"border-box",background:"#142133",border:`1px solid ${s.color}28`,borderRadius:14,padding:"14px",display:"flex",flexDirection:"column",gap:7,userSelect:"none",overflow:"hidden"}}><div style={{display:"flex",alignItems:"center",gap:6}}><div style={{background:s.color+"18",border:`1px solid ${s.color}33`,borderRadius:7,padding:"5px 8px",flexShrink:0}}><span style={{fontSize:s.abbr.length>6?10:s.abbr.length>4?12:15,fontWeight:900,color:s.color,lineHeight:1,whiteSpace:"nowrap"}}>{s.abbr}</span></div><div style={{background:s.color+"12",color:s.color,borderRadius:20,padding:"2px 7px",fontSize:9,fontWeight:700,letterSpacing:"0.07em",textTransform:"uppercase",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{s.tag}</div></div><div style={{fontSize:11,fontWeight:600,color:"#F0EDE6",lineHeight:1.4,wordBreak:"break-word"}}>{s.name}</div><div style={{fontSize:10,color:"rgba(240,237,230,0.4)",lineHeight:1.5}}>{s.desc}</div><div style={{fontSize:9,color:s.color+"99",fontFamily:"monospace",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{s.url}</div></div>);}
-function SourceTicker({setPage}){const trackRef=useRef(null),animRef=useRef(null),posRef=useRef(0),speedRef=useRef(0.5);const doubled=[...SOURCES,...SOURCES];useEffect(()=>{const track=trackRef.current;if(!track)return;const sw=track.scrollWidth/2;const animate=()=>{posRef.current-=speedRef.current;if(Math.abs(posRef.current)>=sw)posRef.current=0;track.style.transform=`translateX(${posRef.current}px)`;animRef.current=requestAnimationFrame(animate);};animRef.current=requestAnimationFrame(animate);return()=>cancelAnimationFrame(animRef.current);},[]);return(<div style={{background:"#0f1e2d",borderTop:"1px solid rgba(240,237,230,0.05)",borderBottom:"1px solid rgba(240,237,230,0.05)",padding:"48px 0",marginTop:64}}><div style={{textAlign:"center",marginBottom:32,padding:"0 24px"}}><div style={{fontSize:10,letterSpacing:"0.16em",textTransform:"uppercase",color:"rgba(240,237,230,0.28)",marginBottom:8,fontWeight:600}}>Built on authoritative data</div><h2 style={{fontSize:"clamp(16px,3vw,26px)",fontWeight:800,letterSpacing:"-0.02em",margin:"0 0 8px"}}>Data you can trust</h2><p style={{fontSize:13,color:"rgba(240,237,230,0.38)",maxWidth:440,margin:"0 auto",lineHeight:1.65}}>Every number on this site is derived from government, regulatory, and institutional sources.</p></div><div style={{position:"relative"}}><div style={{overflow:"hidden"}} onMouseEnter={()=>speedRef.current=0} onMouseLeave={()=>speedRef.current=0.5}><div ref={trackRef} style={{display:"flex",gap:10,width:"max-content",willChange:"transform",padding:"0 12px"}}>{doubled.map((s,i)=><SourceBadge key={i} s={s}/>)}</div></div><div style={{position:"absolute",left:0,top:0,bottom:0,width:80,background:"linear-gradient(90deg,#0f1e2d,transparent)",pointerEvents:"none"}}/><div style={{position:"absolute",right:0,top:0,bottom:0,width:80,background:"linear-gradient(270deg,#0f1e2d,transparent)",pointerEvents:"none"}}/></div><div style={{display:"flex",justifyContent:"center",gap:40,marginTop:28,flexWrap:"wrap",padding:"0 24px"}}>{[{val:"9",label:"official sources"},{val:"2-yearly",label:"ABS data cycle"},{val:"Quarterly",label:"ASFA updates"},{val:"Monthly",label:"APRA & CoreLogic"}].map(s=><div key={s.label} style={{textAlign:"center"}}><div style={{fontSize:16,fontWeight:800,color:"#E8935A",marginBottom:2}}>{s.val}</div><div style={{fontSize:11,color:"rgba(240,237,230,0.3)"}}>{s.label}</div></div>)}</div><div style={{textAlign:"center",marginTop:20}}><button style={{background:"transparent",border:"none",color:"rgba(240,237,230,0.3)",fontSize:12,cursor:"pointer",textDecoration:"underline",textDecorationColor:"rgba(240,237,230,0.15)"}} onClick={()=>setPage("about")}>Full methodology on the About the Data page</button></div></div>);}
+function SourceTicker({setPage}){const trackRef=useRef(null),animRef=useRef(null),posRef=useRef(0),speedRef=useRef(0.5);const doubled=[...SOURCES,...SOURCES];useEffect(()=>{const track=trackRef.current;if(!track)return;const sw=track.scrollWidth/2;const animate=()=>{posRef.current-=speedRef.current;if(Math.abs(posRef.current)>=sw)posRef.current=0;track.style.transform=`translateX(${posRef.current}px)`;animRef.current=requestAnimationFrame(animate);};animRef.current=requestAnimationFrame(animate);return()=>cancelAnimationFrame(animRef.current);},[]);return(<div style={{background:"#0f1e2d",borderTop:"1px solid rgba(240,237,230,0.05)",borderBottom:"1px solid rgba(240,237,230,0.05)",padding:"48px 0",marginTop:64}}><div style={{textAlign:"center",marginBottom:32,padding:"0 24px"}}><div style={{fontSize:10,letterSpacing:"0.16em",textTransform:"uppercase",color:"rgba(240,237,230,0.28)",marginBottom:8,fontWeight:600}}>Built on authoritative data</div><h2 style={{fontSize:"clamp(16px,3vw,26px)",fontWeight:800,letterSpacing:"-0.02em",margin:"0 0 8px"}}>Data you can trust</h2><p style={{fontSize:13,color:"rgba(240,237,230,0.55)",maxWidth:440,margin:"0 auto",lineHeight:1.65}}>Every number on this site is derived from government, regulatory, and institutional sources.</p></div><div style={{position:"relative"}}><div style={{overflow:"hidden"}} onMouseEnter={()=>speedRef.current=0} onMouseLeave={()=>speedRef.current=0.5}><div ref={trackRef} style={{display:"flex",gap:10,width:"max-content",willChange:"transform",padding:"0 12px"}}>{doubled.map((s,i)=><SourceBadge key={i} s={s}/>)}</div></div><div style={{position:"absolute",left:0,top:0,bottom:0,width:80,background:"linear-gradient(90deg,#0f1e2d,transparent)",pointerEvents:"none"}}/><div style={{position:"absolute",right:0,top:0,bottom:0,width:80,background:"linear-gradient(270deg,#0f1e2d,transparent)",pointerEvents:"none"}}/></div><div style={{display:"flex",justifyContent:"center",gap:40,marginTop:28,flexWrap:"wrap",padding:"0 24px"}}>{[{val:"9",label:"official sources"},{val:"2-yearly",label:"ABS data cycle"},{val:"Quarterly",label:"ASFA updates"},{val:"Monthly",label:"APRA & CoreLogic"}].map(s=><div key={s.label} style={{textAlign:"center"}}><div style={{fontSize:16,fontWeight:800,color:"#E8935A",marginBottom:2}}>{s.val}</div><div style={{fontSize:11,color:"rgba(240,237,230,0.3)"}}>{s.label}</div></div>)}</div><div style={{textAlign:"center",marginTop:20}}><button style={{background:"transparent",border:"none",color:"rgba(240,237,230,0.3)",fontSize:12,cursor:"pointer",textDecoration:"underline",textDecorationColor:"rgba(240,237,230,0.15)"}} onClick={()=>setPage("about")}>Full methodology on the About the Data page</button></div></div>);}
 function Bell({percentile,animated,color="#E8935A"}){
   const ref=useRef(null),ar=useRef(null);const [dp,setDp]=useState(0);
   useEffect(()=>{if(!animated){setDp(percentile);return;}let s=null;const ease=t=>t<0.5?2*t*t:-1+(4-2*t)*t;const run=ts=>{if(!s)s=ts;const p=Math.min((ts-s)/1200,1);setDp(Math.round(ease(p)*percentile));if(p<1)ar.current=requestAnimationFrame(run);};ar.current=requestAnimationFrame(run);return()=>cancelAnimationFrame(ar.current);},[percentile,animated]);
@@ -47,7 +50,7 @@ function WhatIf({nw,age,accent}){
 }
 const TOOL_PAGES=["calculator","income","super","forecast","fire"];
 function Nav({page,setPage}){
-  const pages=[{id:"home",l:"Home"},{id:"tools",l:"Tools"},{id:"gen",l:"By Generation"},{id:"insights",l:"Insights"},{id:"about",l:"About the Data"}];
+  const pages=[{id:"home",l:"Home"},{id:"tools",l:"Tools"},{id:"gen",l:"By Generation"},{id:"insights",l:"Insights"},{id:"about-us",l:"About"}];
   const toolActive=TOOL_PAGES.includes(page);
   const [open,setOpen]=useState(false);
   const close=()=>setOpen(false);
@@ -59,8 +62,8 @@ function Nav({page,setPage}){
         <span style={{fontSize:9,background:"rgba(91,160,138,0.12)",color:"#5BA08A",border:"1px solid rgba(91,160,138,0.2)",borderRadius:4,padding:"2px 5px",fontWeight:600}}>v1.5</span>
       </div>
       {/* Desktop nav */}
-      <div className="nav-desktop" style={{display:"flex",gap:2}}>
-        {pages.map(p=>{const active=p.id==="tools"?toolActive:page===p.id;return(<button key={p.id} onClick={()=>go(p.id)} style={{padding:"5px 10px",border:"none",background:active?"rgba(232,147,90,0.12)":"transparent",color:active?"#E8935A":"rgba(240,237,230,0.45)",borderRadius:7,fontSize:12,fontWeight:active?700:400,cursor:"pointer"}}>{p.l}</button>);})}
+      <div className="nav-desktop">
+        <NavHeader page={page} setPage={go} />
       </div>
       {/* Hamburger — visible on small screens via inline media workaround */}
       <button
@@ -90,7 +93,7 @@ function Nav({page,setPage}){
   );
 }
 function Footer({setPage}){
-  const lnk={display:"block",fontSize:12,color:"rgba(240,237,230,0.4)",cursor:"pointer",marginBottom:7,background:"none",border:"none",padding:0,textAlign:"left"};
+  const lnk={display:"block",fontSize:12,color:"rgba(240,237,230,0.55)",cursor:"pointer",marginBottom:2,background:"none",border:"none",padding:"6px 0",textAlign:"left",minHeight:44};
   const th={fontSize:9,fontWeight:700,letterSpacing:"0.12em",textTransform:"uppercase",color:"rgba(240,237,230,0.28)",marginBottom:10};
   return(<footer style={{borderTop:"1px solid rgba(240,237,230,0.06)",marginTop:64,padding:"44px 24px 28px",background:"#0a1628"}}>
     <div style={{maxWidth:780,margin:"0 auto"}}>
@@ -101,7 +104,7 @@ function Footer({setPage}){
           <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>{["No data stored","Free to use"].map(t=><div key={t} style={{display:"flex",alignItems:"center",gap:4,fontSize:10,color:"rgba(240,237,230,0.26)"}}><div style={{width:3,height:3,borderRadius:"50%",background:"#5BA08A"}}/>{t}</div>)}</div>
         </div>
         <div><div style={th}>Tools</div>{[{l:"Net Worth Calculator",p:"calculator"},{l:"Income Calculator",p:"income"},{l:"Super Checker",p:"super"},{l:"Wealth Forecaster",p:"forecast"},{l:"By Generation",p:"gen"},{l:"Insights",p:"insights"}].map(i=><button key={i.l} style={lnk} onClick={()=>setPage(i.p)}>{i.l}</button>)}</div>
-        <div><div style={th}>Information</div>{[{l:"About the Data",p:"about"},{l:"Data Sources",p:"about"},{l:"Changelog",p:"about"}].map(i=><button key={i.l} style={lnk} onClick={()=>setPage(i.p)}>{i.l}</button>)}</div>
+        <div><div style={th}>Information</div>{[{l:"About",p:"about-us"},{l:"Data Sources",p:"about"},{l:"Changelog",p:"about"}].map(i=><button key={i.l} style={lnk} onClick={()=>setPage(i.p)}>{i.l}</button>)}</div>
         <div><div style={th}>Legal</div>{[{l:"Privacy Policy",p:"privacy"},{l:"Disclaimer",p:"disclaimer"},{l:"Terms of Use",p:"terms"}].map(i=><button key={i.l} style={lnk} onClick={()=>setPage(i.p)}>{i.l}</button>)}</div>
       </div>
       <div style={{borderTop:"1px solid rgba(240,237,230,0.05)",paddingTop:16,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
@@ -117,33 +120,19 @@ function Footer({setPage}){
 function Home({setPage}){
   const calcRef=useRef(null);
   return(<div>
-    <div style={{position:"relative",minHeight:"86vh",display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center",textAlign:"center",padding:"80px 24px 60px",overflow:"hidden"}}>
-      <div style={{position:"absolute",inset:0,backgroundImage:"linear-gradient(rgba(240,237,230,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(240,237,230,0.02) 1px,transparent 1px)",backgroundSize:"64px 64px",pointerEvents:"none"}}/>
-      <AmbientCurve/>
-      <div style={{position:"relative",zIndex:1,maxWidth:640}}>
-        <div style={{display:"inline-flex",alignItems:"center",gap:6,background:"rgba(232,147,90,0.1)",border:"1px solid rgba(232,147,90,0.22)",borderRadius:20,padding:"5px 14px",fontSize:11,letterSpacing:"0.12em",textTransform:"uppercase",color:"#E8935A",fontWeight:600,marginBottom:24}}>ABS data · Free · No sign-up</div>
-        <h1 style={{fontSize:"clamp(34px,7vw,66px)",fontWeight:900,lineHeight:1.0,letterSpacing:"-0.03em",margin:"0 0 18px",color:"#F0EDE6"}}>Where do you rank<br/><span style={{color:"#E8935A"}}>financially?</span></h1>
-        <p style={{fontSize:"clamp(14px,2vw,16px)",color:"rgba(240,237,230,0.5)",maxWidth:460,margin:"0 auto 14px",lineHeight:1.75}}>Compare your net worth against real Australian wealth data — by age, household type, and percentile.</p>
-        <div style={{display:"inline-flex",alignItems:"baseline",gap:8,margin:"6px 0 28px",background:"rgba(13,27,42,0.65)",border:"1px solid rgba(240,237,230,0.09)",borderRadius:10,padding:"8px 14px"}}>
-          <span style={{fontSize:11,color:"rgba(240,237,230,0.3)",letterSpacing:"0.08em",textTransform:"uppercase"}}>Median Australian net worth</span>
-          <span style={{fontSize:18,fontWeight:800,color:"#E8935A"}}><CountUp to={350000}/></span>
-        </div>
-        <div style={{display:"flex",gap:10,justifyContent:"center",flexWrap:"wrap"}}>
-          <button onClick={()=>sp("calculator")} style={{padding:"13px 28px",background:"#E8935A",color:"#0D1B2A",border:"none",borderRadius:10,fontSize:15,fontWeight:700,cursor:"pointer"}}>Calculate my rank</button>
-          <button onClick={()=>setPage("gen")} style={{padding:"13px 20px",background:"transparent",color:"rgba(240,237,230,0.55)",border:"1px solid rgba(240,237,230,0.14)",borderRadius:10,fontSize:14,cursor:"pointer"}}>View generational data</button>
-        </div>
-      </div>
-    </div>
-    <div style={{background:"#0f1e2d",borderTop:"1px solid rgba(240,237,230,0.05)",borderBottom:"1px solid rgba(240,237,230,0.05)",padding:"48px 24px"}}>
-      <div style={{maxWidth:580,margin:"0 auto",display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:16,textAlign:"center"}}>
-        {[{n:"1",t:"Enter your numbers",b:"Age, assets, liabilities. Under a minute. Nothing stored."},{n:"2",t:"See your percentile",b:"Compare against Australians your age or all Australians."},{n:"3",t:"Understand your position",b:"Milestone, super check, and a growth simulator."}].map(s=>(<div key={s.n}><div style={{width:30,height:30,borderRadius:7,background:"rgba(232,147,90,0.1)",border:"1px solid rgba(232,147,90,0.22)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:800,color:"#E8935A",margin:"0 auto 10px"}}>{s.n}</div><div style={{fontSize:12,fontWeight:700,marginBottom:4,color:"#F0EDE6"}}>{s.t}</div><div style={{fontSize:11,color:"rgba(240,237,230,0.4)",lineHeight:1.6}}>{s.b}</div></div>))}
-      </div>
+    <BackgroundPaths
+      title="Where do you rank financially"
+      onCalculate={()=>sp("calculator")}
+      onTools={()=>setPage("gen")}
+    />
+    <div style={{background:"#0f1e2d",borderTop:"1px solid rgba(240,237,230,0.05)",borderBottom:"1px solid rgba(240,237,230,0.05)"}}>
+      <HowItWorks onStart={()=>setPage("calculator")}/>
     </div>
     <div ref={calcRef} style={{padding:"52px 24px 0",maxWidth:600,margin:"0 auto"}}>
       <div style={{textAlign:"center",marginBottom:28}}>
         <div style={{fontSize:10,letterSpacing:"0.16em",textTransform:"uppercase",color:"#E8935A",marginBottom:7,fontWeight:600}}>The Calculator</div>
         <h2 style={{fontSize:"clamp(20px,4vw,34px)",fontWeight:800,letterSpacing:"-0.02em",margin:"0 0 10px"}}>Find your percentile</h2>
-        <p style={{fontSize:14,color:"rgba(240,237,230,0.42)",lineHeight:1.65,maxWidth:420,margin:"0 auto"}}>Compare your net worth against real Australian wealth data — by age, household type, and percentile.</p>
+        <p style={{fontSize:14,color:"rgba(240,237,230,0.62)",lineHeight:1.65,maxWidth:420,margin:"0 auto"}}>Compare your net worth against real Australian wealth data, by age, household type, and percentile.</p>
       </div>
       <div style={{background:"#142133",border:"1px solid rgba(240,237,230,0.08)",borderRadius:16,padding:"32px",textAlign:"center"}}>
         <div style={{display:"flex",justifyContent:"center",gap:8,marginBottom:20,flexWrap:"wrap"}}>
@@ -158,10 +147,10 @@ function Home({setPage}){
       </div>
     </div>
     <SourceTicker setPage={setPage}/>
-    <div style={{maxWidth:600,margin:"60px auto 0",padding:"0 24px"}}>
+    <div style={{maxWidth:820,margin:"60px auto 0",padding:"0 24px"}}>
       <div style={{fontSize:10,letterSpacing:"0.14em",textTransform:"uppercase",color:"rgba(240,237,230,0.24)",marginBottom:14,textAlign:"center"}}>Also explore</div>
-      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(170px,1fr))",gap:10}}>
-        {[{id:"calculator",t:"Net Worth Calculator",d:"Where does your net worth rank against other Australians?",c:"#E8935A"},{id:"income",t:"Income Calculator",d:"Where does your salary rank against other Australians?",c:"#5BA08A"},{id:"super",t:"Super on Track Checker",d:"Is your super balance ahead, on track, or behind for your age?",c:"#7EB8D4"},{id:"fire",t:"FIRE Calculator",d:"Your financial independence number and how many years away it is.",c:"#A78BD4"},{id:"gen",t:"Wealth by Generation",d:"How Millennials, Gen X and Boomers compare.",c:"#7EB8D4"},{id:"forecast",t:"Wealth Forecaster",d:"Project your net worth to retirement with life events.",c:"#A78BD4"},{id:"insights",t:"Insights",d:"Data-driven articles on Australian wealth and super.",c:"#E8C05A"},{id:"about",t:"About the Data",d:"Where the numbers come from and what they mean.",c:"#5BA08A"}].map(p=>(<button key={p.id} onClick={()=>setPage(p.id)} style={{background:"#142133",border:`1px solid ${p.c}1a`,borderRadius:12,padding:"18px",textAlign:"left",cursor:"pointer",color:"#F0EDE6"}}><div style={{width:24,height:2,background:p.c,borderRadius:2,marginBottom:10}}/><div style={{fontSize:13,fontWeight:700,marginBottom:4,color:"#F0EDE6"}}>{p.t}</div><div style={{fontSize:11,color:"rgba(240,237,230,0.38)",lineHeight:1.55,marginBottom:8}}>{p.d}</div><div style={{fontSize:11,color:p.c,fontWeight:600}}>View</div></button>))}
+      <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:10}}>
+        {[{id:"calculator",t:"Net Worth Calculator",d:"Where does your net worth rank against other Australians?",c:"#E8935A"},{id:"income",t:"Income Calculator",d:"Where does your salary rank against other Australians?",c:"#5BA08A"},{id:"super",t:"Super on Track Checker",d:"Is your super balance ahead, on track, or behind for your age?",c:"#7EB8D4"},{id:"fire",t:"FIRE Calculator",d:"Your financial independence number and how many years away it is.",c:"#A78BD4"},{id:"gen",t:"Wealth by Generation",d:"How Millennials, Gen X and Boomers compare.",c:"#7EB8D4"},{id:"forecast",t:"Wealth Forecaster",d:"Project your net worth to retirement with life events.",c:"#A78BD4"},{id:"insights",t:"Insights",d:"Data-driven articles on Australian wealth and super.",c:"#E8C05A"},{id:"about",t:"About the Data",d:"Where the numbers come from and what they mean.",c:"#5BA08A"}].map(p=>(<button key={p.id} onClick={()=>setPage(p.id)} style={{background:"#142133",border:`1px solid ${p.c}1a`,borderRadius:12,padding:"18px",textAlign:"left",cursor:"pointer",color:"#F0EDE6"}}><div style={{width:24,height:2,background:p.c,borderRadius:2,marginBottom:10}}/><div style={{fontSize:13,fontWeight:700,marginBottom:4,color:"#F0EDE6"}}>{p.t}</div><div style={{fontSize:11,color:"rgba(240,237,230,0.55)",lineHeight:1.55,marginBottom:8}}>{p.d}</div><div style={{fontSize:11,color:p.c,fontWeight:600}}>View</div></button>))}
       </div>
     </div>
     <Footer setPage={setPage}/>
@@ -216,7 +205,7 @@ function Generations({setPage}){
   const mx=Math.max(...GENS.map(g=>g[GMETS[met].k]));
   const fv=(v,f)=>f==="$"?fmt(v):v+"%";
   return(<div style={{paddingBottom:0}}>
-    <div style={{textAlign:"center",padding:"52px 24px 40px",borderBottom:"1px solid rgba(240,237,230,0.06)"}}><div style={{fontSize:10,letterSpacing:"0.18em",textTransform:"uppercase",color:"#E8935A",marginBottom:10,fontWeight:600}}>Australian Wealth Index</div><h1 style={{fontSize:"clamp(24px,5vw,48px)",fontWeight:800,lineHeight:1.05,letterSpacing:"-0.02em",margin:"0 0 10px"}}>Wealth by Generation</h1><p style={{fontSize:14,color:"rgba(240,237,230,0.45)",maxWidth:460,margin:"0 auto",lineHeight:1.7}}>How Gen Z, Millennials, Gen X, and Baby Boomers compare on net worth, property, and super.</p></div>
+    <div style={{textAlign:"center",padding:"52px 24px 40px",borderBottom:"1px solid rgba(240,237,230,0.06)"}}><div style={{fontSize:10,letterSpacing:"0.18em",textTransform:"uppercase",color:"#E8935A",marginBottom:10,fontWeight:600}}>Australian Wealth Index</div><h1 style={{fontSize:"clamp(24px,5vw,48px)",fontWeight:800,lineHeight:1.05,letterSpacing:"-0.02em",margin:"0 0 10px"}}>Wealth by Generation</h1><p style={{fontSize:14,color:"rgba(240,237,230,0.62)",maxWidth:460,margin:"0 auto",lineHeight:1.7}}>How Gen Z, Millennials, Gen X, and Baby Boomers compare on net worth, property, and super.</p></div>
     <div style={{maxWidth:780,margin:"0 auto",padding:"0 24px"}}>
       <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:10,margin:"36px 0"}}>
         {GENS.map((g,i)=><div key={g.name} style={{background:"#142133",border:`1px solid ${g.color}28`,borderRadius:12,padding:"14px 10px",textAlign:"center",opacity:vis?1:0,transform:vis?"translateY(0)":"translateY(12px)",transition:`all 0.4s ease ${i*0.07}s`}}><div style={{fontSize:11,fontWeight:700,color:g.color,marginBottom:2}}>{g.name}</div><div style={{fontSize:"clamp(14px,2.5vw,22px)",fontWeight:900,letterSpacing:"-0.02em"}}>{fmt(g.nw)}</div><div style={{fontSize:9,color:"rgba(240,237,230,0.25)",marginTop:2,textTransform:"uppercase",letterSpacing:"0.07em"}}>median net worth</div></div>)}
@@ -234,7 +223,7 @@ function Generations({setPage}){
         {GENS.map(g=><div key={g.name} style={{background:"#142133",border:`1px solid ${g.color}22`,borderRadius:12,padding:"20px"}}>
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:12}}><div><div style={{fontSize:16,fontWeight:800,color:g.color,marginBottom:1}}>{g.name}</div><div style={{fontSize:9,color:"rgba(240,237,230,0.28)"}}>{g.years}</div></div><div style={{background:g.color+"18",border:`1px solid ${g.color}2a`,borderRadius:5,padding:"3px 7px",fontSize:9,color:g.color,fontWeight:700,textAlign:"right",maxWidth:100,lineHeight:1.3}}>{g.stat}</div></div>
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:6,marginBottom:12}}>{[{l:"Net Worth",v:fmt(g.nw),hi:true},{l:"Ownership",v:g.own+"%"},{l:"Super",v:fmt(g.super)},{l:"Avg Debt",v:fmt(g.debt)}].map(s=><div key={s.l} style={{background:"rgba(13,27,42,0.5)",borderRadius:7,padding:"8px 9px"}}><div style={{fontSize:8,color:"rgba(240,237,230,0.28)",textTransform:"uppercase",letterSpacing:"0.07em",marginBottom:2}}>{s.l}</div><div style={{fontSize:13,fontWeight:700,color:s.hi?g.color:"#F0EDE6"}}>{s.v}</div></div>)}</div>
-          <div style={{fontSize:11,color:"rgba(240,237,230,0.42)",lineHeight:1.6,borderTop:"1px solid rgba(240,237,230,0.05)",paddingTop:9,marginBottom:7}}>{g.challenge}</div>
+          <div style={{fontSize:11,color:"rgba(240,237,230,0.62)",lineHeight:1.6,borderTop:"1px solid rgba(240,237,230,0.05)",paddingTop:9,marginBottom:7}}>{g.challenge}</div>
           <div style={{fontSize:10,color:g.color,fontStyle:"italic",lineHeight:1.5}}>"{g.fact}"</div>
         </div>)}
       </div>
@@ -270,7 +259,7 @@ function ArticlePage({id,setPage}){
     <div style={{borderBottom:"1px solid rgba(240,237,230,0.06)",padding:"48px 24px 40px",textAlign:"center",maxWidth:640,margin:"0 auto"}}>
       <div style={{display:"inline-block",background:meta.tagColor+"18",color:meta.tagColor,border:`1px solid ${meta.tagColor}33`,borderRadius:20,padding:"3px 11px",fontSize:10,fontWeight:700,letterSpacing:"0.12em",textTransform:"uppercase",marginBottom:16}}>{meta.tag}</div>
       <h1 style={{fontSize:"clamp(20px,4vw,36px)",fontWeight:800,lineHeight:1.15,letterSpacing:"-0.02em",margin:"0 0 14px"}}>{meta.title}</h1>
-      <p style={{fontSize:15,color:"rgba(240,237,230,0.5)",lineHeight:1.7,margin:"0 0 16px"}}>{meta.subtitle}</p>
+      <p style={{fontSize:15,color:"rgba(240,237,230,0.68)",lineHeight:1.7,margin:"0 0 16px"}}>{meta.subtitle}</p>
       <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:10,fontSize:11,color:"rgba(240,237,230,0.28)"}}><span>{meta.date}</span><span style={{opacity:0.4}}>·</span><span>{meta.readTime}</span></div>
     </div>
     <div style={{maxWidth:620,margin:"0 auto",padding:"36px 24px 0"}}>
@@ -282,7 +271,7 @@ function ArticlePage({id,setPage}){
         if(s.t==="bars")return <div key={i} style={{background:"#142133",border:"1px solid rgba(240,237,230,0.07)",borderRadius:14,padding:"18px",margin:"20px 0"}}>{s.d.map(b=><div key={b.label} style={{marginBottom:9}}><div style={{display:"flex",justifyContent:"space-between",marginBottom:3}}><span style={{fontSize:11,color:"rgba(240,237,230,0.48)"}}>{b.label}</span><span style={{fontSize:11,fontWeight:700,color:"#F0EDE6"}}>{fmtR(b.v)}</span></div><div style={{background:"rgba(13,27,42,0.6)",borderRadius:4,height:6,overflow:"hidden"}}><div style={{width:`${Math.round((b.v/s.mx)*100)}%`,height:"100%",background:b.c,borderRadius:4}}/></div></div>)}</div>;
         return null;
       })}
-      <div style={{background:"linear-gradient(135deg,#1a2e42,#142133)",border:"1px solid rgba(232,147,90,0.2)",borderRadius:14,padding:"24px",margin:"36px 0 0",textAlign:"center"}}><div style={{fontSize:15,fontWeight:700,marginBottom:5}}>See where you personally rank</div><div style={{fontSize:12,color:"rgba(240,237,230,0.42)",marginBottom:16}}>The calculator puts you in the picture personally, not just nationally.</div><button onClick={()=>setPage("home")} style={{padding:"12px 24px",background:"#E8935A",color:"#0D1B2A",border:"none",borderRadius:10,fontSize:13,fontWeight:700,cursor:"pointer"}}>Calculate My Rank</button></div>
+      <div style={{background:"linear-gradient(135deg,#1a2e42,#142133)",border:"1px solid rgba(232,147,90,0.2)",borderRadius:14,padding:"24px",margin:"36px 0 0",textAlign:"center"}}><div style={{fontSize:15,fontWeight:700,marginBottom:5}}>See where you personally rank</div><div style={{fontSize:12,color:"rgba(240,237,230,0.62)",marginBottom:16}}>The calculator puts you in the picture personally, not just nationally.</div><button onClick={()=>setPage("home")} style={{padding:"12px 24px",background:"#E8935A",color:"#0D1B2A",border:"none",borderRadius:10,fontSize:13,fontWeight:700,cursor:"pointer"}}>Calculate My Rank</button></div>
       <div style={{textAlign:"center",fontSize:9,color:"rgba(240,237,230,0.16)",margin:"28px 0 72px",letterSpacing:"0.05em"}}>DATA: ABS · FOR INFORMATIONAL USE ONLY · NOT FINANCIAL ADVICE</div>
     </div>
     <Footer setPage={setPage}/>
@@ -290,7 +279,7 @@ function ArticlePage({id,setPage}){
 }
 function Insights({setPage,setArticle}){
   return(<div style={{paddingBottom:0}}>
-    <div style={{textAlign:"center",padding:"52px 24px 40px",borderBottom:"1px solid rgba(240,237,230,0.06)"}}><div style={{fontSize:10,letterSpacing:"0.18em",textTransform:"uppercase",color:"#E8935A",marginBottom:10,fontWeight:600}}>Australian Wealth Index</div><h1 style={{fontSize:"clamp(24px,5vw,48px)",fontWeight:800,lineHeight:1.05,letterSpacing:"-0.02em",margin:"0 0 10px"}}>Insights</h1><p style={{fontSize:14,color:"rgba(240,237,230,0.45)",maxWidth:440,margin:"0 auto",lineHeight:1.7}}>Data-driven articles on Australian wealth, income, super, and financial wellbeing.</p></div>
+    <div style={{textAlign:"center",padding:"52px 24px 40px",borderBottom:"1px solid rgba(240,237,230,0.06)"}}><div style={{fontSize:10,letterSpacing:"0.18em",textTransform:"uppercase",color:"#E8935A",marginBottom:10,fontWeight:600}}>Australian Wealth Index</div><h1 style={{fontSize:"clamp(24px,5vw,48px)",fontWeight:800,lineHeight:1.05,letterSpacing:"-0.02em",margin:"0 0 10px"}}>Insights</h1><p style={{fontSize:14,color:"rgba(240,237,230,0.62)",maxWidth:440,margin:"0 auto",lineHeight:1.7}}>Data-driven articles on Australian wealth, income, super, and financial wellbeing.</p></div>
     <div style={{maxWidth:780,margin:"0 auto",padding:"36px 24px 0"}}>
       <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(320px,1fr))",gap:14}}>
         {ARTICLES.map(a=><button key={a.id} onClick={()=>{setArticle(a.id);setPage("article");}} style={{background:"#142133",border:`1px solid ${a.tagColor}1a`,borderRadius:14,padding:"22px",textAlign:"left",cursor:"pointer"}}>
@@ -308,10 +297,40 @@ function Insights({setPage,setArticle}){
 }
 const ABOUT_SECS=[{id:"source",t:"Data source",b:"All percentile data is derived from the ABS Household Income and Wealth survey (cat. 6523.0), 2021–22. Australia's most comprehensive household wealth survey, covering approximately 14,000 private dwellings nationally.",note:"The 2021–22 data was collected during a period of elevated property prices. We will update when the 2023–24 release becomes available."},{id:"networth",t:"How net worth is calculated",b:"Net worth = Total Assets minus Total Liabilities. Assets include property, super, shares, managed funds, cash, vehicles, and other assets. Liabilities include mortgage, HECS-HELP, personal loans, credit cards, car loans, and other debts.",note:null},{id:"percentile",t:"What a percentile means",b:"If you're at the 70th percentile, your net worth exceeds 70% of Australians in the group. Percentiles are not the same as percentage of wealth. The top end holds a disproportionate share. Boundaries between ABS data points are interpolated and approximate.",note:null},{id:"agegroups",t:"Age-adjusted comparisons",b:"Comparing against your age group uses the wealth distribution for your bracket. Age groups: 18–24, 25–34, 35–44, 45–54, 55–64, and 65+. For couples, the older partner's age is used.",note:null},{id:"super",t:"Superannuation benchmarks",b:"Uses median super balances (ATO/ASFA 2022–23) and the ASFA comfortable retirement standard: $595,000 singles, $690,000 couples at age 67. Projections assume 7% growth and 11% employer contributions on a $65,000 wage. Illustrative only.",note:null},{id:"limits",t:"Limitations",b:"Data is from 2021–22 and markets have shifted. Percentile estimates are interpolated. The simulator does not model tax, inflation, or fees. Self-reported survey data may understate wealth at the top end.",note:null},{id:"advice",t:"Not financial advice",b:"For informational and educational purposes only. Nothing here constitutes financial product advice under the Corporations Act 2001 (Cth). Seek advice from a licensed financial adviser (AFSL holder) before any financial decision. Find one at moneysmart.gov.au.",note:null},{id:"sources",t:"All data sources",b:"",note:null},{id:"changelog",t:"Changelog",b:"",note:null}];
 const CHANGELOG=[{date:"June 2026",version:"v1.4",tag:"Data & trust",tagColor:"#7EB8D4",items:["Added full data sources registry — 9 official Australian sources","Added data sources showcase to homepage","Added changelog and version badges throughout site"]},{date:"June 2026",version:"v1.3",tag:"New feature",tagColor:"#5BA08A",items:["Added Insights section with four data-driven articles","Added Wealth by Generation page with interactive charts"]},{date:"May 2026",version:"v1.2",tag:"New feature",tagColor:"#5BA08A",items:["Added couple household mode with ABS couple dataset","Added deep dive mode with itemised fields","Added superannuation health check","Added what-if growth simulator"]},{date:"April 2026",version:"v1.1",tag:"Data update",tagColor:"#E8C05A",items:["Updated ASFA figures to 2023–24","Updated median super to ATO 2022–23 data","Added next milestone card to results"]},{date:"March 2026",version:"v1.0",tag:"Launch",tagColor:"#E8935A",items:["Site launched with ABS 2021–22 data","Net worth percentile calculator","Bell curve visualisation","Share result functionality"]}];
+function AboutUs({setPage}){
+  return(<div style={{paddingBottom:0}}>
+    <div style={{textAlign:"center",padding:"52px 24px 40px",borderBottom:"1px solid rgba(240,237,230,0.06)"}}>
+      <div style={{fontSize:10,letterSpacing:"0.18em",textTransform:"uppercase",color:"#E8935A",marginBottom:10,fontWeight:600}}>Our Story</div>
+      <h1 style={{fontSize:"clamp(24px,5vw,48px)",fontWeight:800,lineHeight:1.05,letterSpacing:"-0.02em",margin:"0 0 10px"}}>About WealthRank AU</h1>
+      <p style={{fontSize:14,color:"rgba(240,237,230,0.62)",maxWidth:480,margin:"0 auto",lineHeight:1.7}}>Free, private, and built on real data — because everyone deserves to know where they stand.</p>
+    </div>
+    <div style={{maxWidth:640,margin:"0 auto",padding:"48px 24px"}}>
+      {[
+        {heading:null,body:"WealthRank AU started with a simple question: where do I actually stand financially compared to other Australians? The data existed. The ABS publishes comprehensive household wealth surveys. But nobody had made it accessible in a way that gave a clear, personal answer. So we built it."},
+        {heading:"What it is",body:"A free, data-driven tool that lets any Australian compare their net worth, income, and wealth trajectory against real population data from the Australian Bureau of Statistics and other official sources. No sign-up. No data stored on our servers. No financial advice. Everything you enter stays on your device."},
+        {heading:"What it is not",body:"WealthRank AU is not a financial adviser and does not provide financial product advice. The calculators and projections are educational tools based on population-level data and simplified assumptions. They do not account for your individual tax situation, fees, or personal circumstances. For personalised financial advice, speak with a licensed financial adviser. You can find one at moneysmart.gov.au."},
+        {heading:"The data",body:null},
+        {heading:"Privacy",body:"We do not collect, store, or transmit any financial data you enter. Calculations run entirely in your browser. We do not use advertising or tracking cookies."},
+      ].map((s,i)=>(
+        <div key={i} style={{marginBottom:36}}>
+          {s.heading&&<h2 style={{fontSize:18,fontWeight:800,letterSpacing:"-0.01em",margin:"0 0 10px",color:"#F0EDE6"}}>{s.heading}</h2>}
+          {s.body&&<p style={{fontSize:14,color:"rgba(240,237,230,0.68)",lineHeight:1.85,margin:0}}>{s.body}</p>}
+          {s.heading==="The data"&&<p style={{fontSize:14,color:"rgba(240,237,230,0.68)",lineHeight:1.85,margin:0}}>Every figure on this site is derived from authoritative Australian sources including the ABS Household Income and Wealth survey, ATO Taxation Statistics, ASFA retirement benchmarks, APRA superannuation data, RBA household finance data, CoreLogic property figures, and the HILDA longitudinal survey. Full methodology and source details are on the{" "}<button onClick={()=>setPage("about")} style={{background:"none",border:"none",padding:0,color:"#E8935A",fontWeight:600,fontSize:14,cursor:"pointer",textDecoration:"underline",textDecorationColor:"rgba(232,147,90,0.4)"}}>Data Sources page</button>.</p>}
+        </div>
+      ))}
+      <div style={{background:"#142133",border:"1px solid rgba(240,237,230,0.08)",borderRadius:14,padding:"24px",marginBottom:36}}>
+        <h2 style={{fontSize:18,fontWeight:800,margin:"0 0 10px",color:"#F0EDE6"}}>Get in touch</h2>
+        <p style={{fontSize:14,color:"rgba(240,237,230,0.68)",lineHeight:1.85,margin:"0 0 14px"}}>Questions, feedback, or data corrections welcome.</p>
+        <a href="mailto:hello@wealthrankau.com.au" style={{color:"#E8935A",fontWeight:600,fontSize:14,textDecoration:"none",borderBottom:"1px solid rgba(232,147,90,0.4)"}}>hello@wealthrankau.com.au</a>
+      </div>
+    </div>
+    <Footer setPage={setPage}/>
+  </div>);
+}
 function About({setPage}){
   const [act,setAct]=useState("source");
   return(<div style={{paddingBottom:0}}>
-    <div style={{textAlign:"center",padding:"52px 24px 40px",borderBottom:"1px solid rgba(240,237,230,0.06)"}}><div style={{fontSize:10,letterSpacing:"0.18em",textTransform:"uppercase",color:"#E8935A",marginBottom:10,fontWeight:600}}>Australian Wealth Index</div><h1 style={{fontSize:"clamp(24px,5vw,48px)",fontWeight:800,lineHeight:1.05,letterSpacing:"-0.02em",margin:"0 0 10px"}}>About the Data</h1><p style={{fontSize:14,color:"rgba(240,237,230,0.45)",maxWidth:440,margin:"0 auto",lineHeight:1.7}}>Where the numbers come from, what they mean, and what to keep in mind.</p></div>
+    <div style={{textAlign:"center",padding:"52px 24px 40px",borderBottom:"1px solid rgba(240,237,230,0.06)"}}><div style={{fontSize:10,letterSpacing:"0.18em",textTransform:"uppercase",color:"#E8935A",marginBottom:10,fontWeight:600}}>Australian Wealth Index</div><h1 style={{fontSize:"clamp(24px,5vw,48px)",fontWeight:800,lineHeight:1.05,letterSpacing:"-0.02em",margin:"0 0 10px"}}>About the Data</h1><p style={{fontSize:14,color:"rgba(240,237,230,0.62)",maxWidth:440,margin:"0 auto",lineHeight:1.7}}>Where the numbers come from, what they mean, and what to keep in mind.</p></div>
     <div style={{maxWidth:740,margin:"0 auto",padding:"36px 24px 0",display:"grid",gridTemplateColumns:"180px 1fr",gap:28,alignItems:"start"}}>
       <div style={{position:"sticky",top:64}}>
         <div style={{fontSize:8,letterSpacing:"0.12em",textTransform:"uppercase",color:"rgba(240,237,230,0.2)",marginBottom:7}}>Contents</div>
@@ -345,7 +364,7 @@ function About({setPage}){
             <div style={{background:"rgba(240,237,230,0.03)",border:"1px solid rgba(240,237,230,0.06)",borderRadius:8,padding:"11px 13px"}}><div style={{fontSize:12,color:"rgba(240,237,230,0.32)",lineHeight:1.65}}>The ABS Household Income and Wealth survey is published every two years. The next release covering 2023–24 data is expected in late 2025. All figures will be updated within two weeks of publication.</div></div>
           </div>):(<div style={{background:"#142133",border:`1px solid ${act===s.id?"rgba(240,237,230,0.08)":"rgba(240,237,230,0.03)"}`,borderRadius:10,padding:"16px"}}><p style={{fontSize:13,color:"rgba(240,237,230,0.58)",lineHeight:1.8,margin:"0 0 8px"}}>{s.b}</p>{s.note&&<div style={{background:"rgba(232,147,90,0.06)",border:"1px solid rgba(232,147,90,0.15)",borderRadius:7,padding:"9px 11px"}}><div style={{fontSize:8,letterSpacing:"0.1em",textTransform:"uppercase",color:"#E8935A",fontWeight:700,marginBottom:3}}>Note</div><div style={{fontSize:12,color:"rgba(240,237,230,0.48)",lineHeight:1.6}}>{s.note}</div></div>}</div>)}
         </div>)}
-        <div style={{background:"linear-gradient(135deg,#1a2e42,#142133)",border:"1px solid rgba(232,147,90,0.15)",borderRadius:12,padding:"20px",textAlign:"center",marginBottom:32}}><div style={{fontSize:13,fontWeight:700,marginBottom:4}}>Ready to calculate your rank?</div><div style={{fontSize:11,color:"rgba(240,237,230,0.38)",marginBottom:13}}>Now that you understand the methodology, see where you sit.</div><button onClick={()=>setPage("home")} style={{padding:"10px 22px",background:"#E8935A",color:"#0D1B2A",border:"none",borderRadius:10,fontSize:13,fontWeight:700,cursor:"pointer"}}>Go to the Calculator</button></div>
+        <div style={{background:"linear-gradient(135deg,#1a2e42,#142133)",border:"1px solid rgba(232,147,90,0.15)",borderRadius:12,padding:"20px",textAlign:"center",marginBottom:32}}><div style={{fontSize:13,fontWeight:700,marginBottom:4}}>Ready to calculate your rank?</div><div style={{fontSize:11,color:"rgba(240,237,230,0.55)",marginBottom:13}}>Now that you understand the methodology, see where you sit.</div><button onClick={()=>setPage("home")} style={{padding:"10px 22px",background:"#E8935A",color:"#0D1B2A",border:"none",borderRadius:10,fontSize:13,fontWeight:700,cursor:"pointer"}}>Go to the Calculator</button></div>
         <div style={{textAlign:"center",fontSize:9,color:"rgba(240,237,230,0.16)",marginBottom:32,letterSpacing:"0.05em"}}>ABS 2021–22 · ASFA 2023–24</div>
       </div>
     </div>
@@ -365,7 +384,7 @@ function SharedResultBanner({r,onDismiss,setPage}){
           <div style={{fontSize:9,color:"rgba(240,237,230,0.4)",textTransform:"uppercase",letterSpacing:"0.06em"}}>percentile</div>
         </div>
         <div>
-          <div style={{fontSize:12,color:"rgba(240,237,230,0.5)",marginBottom:2}}>Someone shared their result with you</div>
+          <div style={{fontSize:12,color:"rgba(240,237,230,0.68)",marginBottom:2}}>Someone shared their result with you</div>
           <div style={{fontSize:14,fontWeight:700,color:"#F0EDE6"}}>They rank in the top {100-r.pct}% of Australian {r.ht==="couple"?"couples":"individuals"}</div>
           <div style={{display:"inline-block",background:li.color+"22",color:li.color,border:`1px solid ${li.color}33`,borderRadius:5,padding:"2px 8px",fontSize:10,fontWeight:700,marginTop:4}}>{li.label}</div>
         </div>
@@ -387,7 +406,7 @@ function Tools({setPage}){
     <div style={{textAlign:"center",padding:"52px 24px 48px",borderBottom:"1px solid rgba(240,237,230,0.06)"}}>
       <div style={{fontSize:10,letterSpacing:"0.18em",textTransform:"uppercase",color:"#E8935A",marginBottom:10,fontWeight:600}}>Australian Wealth Index</div>
       <h1 style={{fontSize:"clamp(26px,5vw,52px)",fontWeight:800,lineHeight:1.05,letterSpacing:"-0.03em",margin:"0 0 12px"}}>Financial Tools</h1>
-      <p style={{fontSize:14,color:"rgba(240,237,230,0.45)",maxWidth:480,margin:"0 auto",lineHeight:1.75}}>Free, data-driven calculators to help you understand where you stand financially — no sign-up, nothing stored.</p>
+      <p style={{fontSize:14,color:"rgba(240,237,230,0.62)",maxWidth:480,margin:"0 auto",lineHeight:1.75}}>Free, data-driven calculators to help you understand where you stand financially — no sign-up, nothing stored.</p>
     </div>
     <div style={{maxWidth:840,margin:"0 auto",padding:"44px 24px 0"}}>
       <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(360px,1fr))",gap:16}}>
@@ -418,7 +437,7 @@ function Tools({setPage}){
                 {t.what.map(w=>(
                   <div key={w} style={{display:"flex",alignItems:"center",gap:7}}>
                     <div style={{width:4,height:4,borderRadius:"50%",background:t.color,flexShrink:0}}/>
-                    <span style={{fontSize:12,color:"rgba(240,237,230,0.5)"}}>{w}</span>
+                    <span style={{fontSize:12,color:"rgba(240,237,230,0.68)"}}>{w}</span>
                   </div>
                 ))}
               </div>
@@ -450,6 +469,21 @@ export default function App(){
       if(encoded){const decoded=new URLSearchParams(atob(encoded));setSharedResult({pct:parseInt(decoded.get("p")),nw:parseInt(decoded.get("nw")),ht:decoded.get("ht"),cmp:decoded.get("cmp"),ag:decoded.get("ag")});}
     }catch(e){}
   },[]);
+  useEffect(()=>{
+    const titles={
+      home:       "WealthRank AU — Where Do You Rank Financially?",
+      calculator: "Net Worth Calculator — Find Your Australian Wealth Percentile | WealthRank AU",
+      income:     "Income Calculator — Where Does Your Salary Rank? | WealthRank AU",
+      super:      "Super on Track Checker — Are You Ahead or Behind? | WealthRank AU",
+      forecast:   "Wealth Forecaster — Project Your Net Worth | WealthRank AU",
+      fire:       "FIRE Calculator — Your Financial Independence Number | WealthRank AU",
+      gen:        "Wealth by Generation — Millennials vs Boomers vs Gen X | WealthRank AU",
+      insights:   "Insights — Australian Wealth & Super Data | WealthRank AU",
+      "about-us": "About WealthRank AU — Our Story & Privacy",
+      about:      "Data Sources & Methodology | WealthRank AU",
+    };
+    document.title=titles[page]||titles.home;
+  },[page]);
   const sp=(p)=>{setPage(p);window.scrollTo({top:0,behavior:"smooth"});};
   return(<div style={{minHeight:"100vh",background:"#0D1B2A",color:"#F0EDE6",fontFamily:"'Inter',system-ui,sans-serif"}}>
     <style>{`
@@ -459,8 +493,11 @@ export default function App(){
       }
       @keyframes pageIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
       .page-fade{animation:pageIn 0.25s ease both;}
+      *:focus-visible{outline:2px solid #E8935A;outline-offset:3px;border-radius:4px;}
+      button{cursor:pointer;min-height:44px;}
+      button:focus-visible{outline:2px solid #E8935A;outline-offset:3px;}
     `}</style>
-    <Nav page={page} setPage={sp}/>
+    <Header page={page} setPage={sp}/>
     {sharedResult&&<SharedResultBanner r={sharedResult} onDismiss={()=>setSharedResult(null)} setPage={sp}/>}
     <div key={page} className="page-fade">
       {page==="home" && <Home setPage={sp}/>}
@@ -473,6 +510,7 @@ export default function App(){
       {page==="fire" && <FireCalc setPage={sp}/>}
       {page==="insights" && <Insights setPage={sp} setArticle={setArticle}/>}
       {page==="article" && article && <ArticlePage id={article} setPage={sp}/>}
+      {page==="about-us" && <AboutUs setPage={sp}/>}
       {page==="about" && <About setPage={sp}/>}
       {(page==="privacy"||page==="disclaimer"||page==="terms") && <LegalPage id={page} setPage={sp}/>}
     </div>
