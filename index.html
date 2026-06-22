@@ -1,32 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-AU">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Primary meta -->
-    <title>WealthRank AU — Where do you rank financially?</title>
-    <meta name="description" content="Find out where your net worth ranks against other Australians. Free, data-driven calculator based on ABS 2021–22 data. Compare by age, household type, and percentile." />
-    <meta name="keywords" content="net worth calculator Australia, wealth percentile Australia, average net worth Australia, ABS wealth data, superannuation calculator" />
+    <title>WealthRank AU — Where Do You Rank Financially?</title>
+    <meta name="description" content="Find out where your net worth ranks against other Australians. Free calculator based on ABS 2021–22 data. Compare by age, household type, and percentile." />
+    <meta name="keywords" content="net worth calculator Australia, wealth percentile Australia, average net worth by age Australia, ABS wealth data, superannuation calculator, income percentile Australia, FIRE calculator Australia, financial independence Australia" />
     <meta name="author" content="WealthRank AU" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="geo.region" content="AU" />
+    <meta name="geo.placename" content="Australia" />
 
     <!-- Open Graph (Facebook, LinkedIn, iMessage, Slack) -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://www.wealthrank.com.au/" />
-    <meta property="og:title" content="WealthRank AU — Where do you rank financially?" />
+    <meta property="og:title" content="WealthRank AU — Where Do You Rank Financially?" />
     <meta property="og:description" content="Compare your net worth against real Australian wealth data. Free calculator based on ABS 2021–22 data — by age, household type, and percentile." />
     <meta property="og:image" content="https://www.wealthrank.com.au/social-card.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="WealthRank AU — Australian wealth percentile calculator" />
     <meta property="og:locale" content="en_AU" />
     <meta property="og:site_name" content="WealthRank AU" />
 
     <!-- Twitter / X card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content="https://www.wealthrank.com.au/" />
-    <meta name="twitter:title" content="WealthRank AU — Where do you rank financially?" />
+    <meta name="twitter:title" content="WealthRank AU — Where Do You Rank Financially?" />
     <meta name="twitter:description" content="Compare your net worth against real Australian wealth data. Free calculator based on ABS 2021–22 data." />
     <meta name="twitter:image" content="https://www.wealthrank.com.au/social-card.png" />
+    <meta name="twitter:image:alt" content="WealthRank AU — Australian wealth percentile calculator" />
 
     <!-- Favicon — inline SVG as data URI -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230D1B2A'/%3E%3Ctext x='16' y='22' font-family='system-ui,sans-serif' font-weight='900' font-size='16' fill='%23F0EDE6' text-anchor='middle'%3EW%3C/text%3E%3Ctext x='22' y='22' font-family='system-ui,sans-serif' font-weight='900' font-size='16' fill='%23E8935A' text-anchor='middle'%3ER%3C/text%3E%3C/svg%3E" />
@@ -41,6 +46,8 @@
     <link rel="canonical" href="https://www.wealthrank.com.au/" />
 
     <!-- Google Analytics -->
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+    <link rel="dns-prefetch" href="https://www.google-analytics.com" />
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-JJ9YMBN84V"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -54,31 +61,46 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-    <!-- Structured data (Google rich results) -->
+    <!-- Structured data — site identity (static, not per-page) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "WealthRank AU",
-      "url": "https://www.wealthrank.com.au",
-      "description": "Free net worth percentile calculator for Australians. Compare your wealth against ABS 2021–22 data by age and household type.",
-      "applicationCategory": "FinanceApplication",
-      "operatingSystem": "Any",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "AUD"
-      },
-      "author": {
-        "@type": "Organization",
-        "name": "WealthRank AU",
-        "url": "https://www.wealthrank.com.au"
-      }
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "name": "WealthRank AU",
+          "url": "https://www.wealthrank.com.au",
+          "description": "Free net worth percentile calculator and financial tools for Australians, based on official ABS and ATO data.",
+          "inLanguage": "en-AU"
+        },
+        {
+          "@type": "Organization",
+          "name": "WealthRank AU",
+          "url": "https://www.wealthrank.com.au",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://www.wealthrank.com.au/social-card.png",
+            "width": 1200,
+            "height": 630
+          },
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "email": "hello@wealthrankau.com.au",
+            "contactType": "customer service",
+            "availableLanguage": "English"
+          }
+        }
+      ]
     }
     </script>
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      <h1>WealthRank AU — Australian Wealth Percentile Calculator</h1>
+      <p>Find out where your net worth ranks against other Australians. Free calculator based on ABS 2021–22 data.</p>
+      <p>Please enable JavaScript to use the interactive tools on this site.</p>
+    </noscript>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

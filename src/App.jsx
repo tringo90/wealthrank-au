@@ -458,6 +458,68 @@ function Tools({setPage}){
     <Footer setPage={setPage}/>
   </div>);
 }
+const PAGE_META={
+  home:       {title:"WealthRank AU — Where Do You Rank Financially?",                                             desc:"Find out where your net worth ranks against other Australians. Free calculator based on ABS 2021–22 data. Compare by age and household type."},
+  calculator: {title:"Net Worth Calculator — Find Your Australian Wealth Percentile | WealthRank AU",              desc:"Enter your assets and liabilities to see exactly where your net worth ranks among Australians your age. Free, based on ABS 2021–22 household wealth data."},
+  income:     {title:"Income Calculator — Where Does Your Salary Rank in Australia? | WealthRank AU",              desc:"Find out what income percentile your salary puts you in among Australian earners, broken down by age group. Free. Data from ATO Taxation Statistics."},
+  super:      {title:"Super on Track Checker — Is Your Superannuation Ahead or Behind? | WealthRank AU",          desc:"Compare your super balance to ATO benchmarks for your age. See if you're on track for an ASFA comfortable retirement. Free superannuation calculator."},
+  forecast:   {title:"Wealth Forecaster — Project Your Net Worth to Retirement | WealthRank AU",                  desc:"Model how your net worth grows with custom savings rates, investment returns, and life events. See your wealth trajectory to retirement. Free tool."},
+  fire:       {title:"FIRE Calculator Australia — Financial Independence Number | WealthRank AU",                  desc:"Calculate your financial independence number using the 4% rule, find how many years until you can retire early, and discover your Coast FIRE milestone."},
+  gen:        {title:"Wealth by Generation — Millennials vs Boomers vs Gen X Australia | WealthRank AU",           desc:"Compare net worth, property ownership, and super across Gen Z, Millennials, Gen X, and Baby Boomers using ABS 2021–22 household wealth data."},
+  insights:   {title:"Insights — Australian Wealth, Income & Super Data Articles | WealthRank AU",                 desc:"Data-driven articles on Australian wealth, income, superannuation, and financial independence. Based on ABS, ATO, ASFA, and RBA data."},
+  "about-us": {title:"About WealthRank AU — Free Financial Tools for Australians",                                 desc:"WealthRank AU provides free, private tools for Australians to compare their net worth and income against official data. No sign-up required, no data stored."},
+  about:      {title:"Data Sources & Methodology | WealthRank AU",                                                 desc:"Where the numbers come from: ABS Household Income and Wealth 2021–22, ATO Taxation Statistics, ASFA retirement benchmarks, APRA, RBA, CoreLogic, and HILDA."},
+  privacy:    {title:"Privacy Policy | WealthRank AU",                                                             desc:"WealthRank AU does not collect or store any financial data. All calculations run in your browser. Read our full privacy policy."},
+  disclaimer: {title:"Disclaimer | WealthRank AU",                                                                 desc:"WealthRank AU is an informational tool only. Nothing on this site constitutes financial product advice. Read our full disclaimer."},
+  terms:      {title:"Terms of Use | WealthRank AU",                                                               desc:"Terms of use for WealthRank AU — free Australian wealth comparison tools. For personal, non-commercial, informational use only."},
+};
+const BASE_URL="https://www.wealthrank.com.au";
+const PAGE_SCHEMAS={
+  home:[{
+    "@context":"https://schema.org","@type":"FAQPage",
+    "mainEntity":[
+      {"@type":"Question","name":"What is the average net worth of Australians?","acceptedAnswer":{"@type":"Answer","text":"The median net worth of all Australians is approximately $350,000 according to ABS 2021–22 data. By age group: 18–24 ($35,000), 25–34 ($145,000), 35–44 ($420,000), 45–54 ($620,000), 55–64 ($790,000), and 65+ ($900,000)."}},
+      {"@type":"Question","name":"What net worth is considered wealthy in Australia?","acceptedAnswer":{"@type":"Answer","text":"Based on ABS 2021–22 data: top 25% requires a net worth of $730,000; top 10% requires $1,650,000; top 5% requires $2,500,000; and top 1% requires $5,200,000."}},
+      {"@type":"Question","name":"What salary puts you in the top 10% of Australian earners?","acceptedAnswer":{"@type":"Answer","text":"An individual income of approximately $130,000 per year places you in the top 10% of Australian earners, according to ATO Taxation Statistics. The top 1% threshold is approximately $350,000 per year."}},
+      {"@type":"Question","name":"How much superannuation should I have at my age?","acceptedAnswer":{"@type":"Answer","text":"ATO median super balances by age: 18–24 ($5,000), 25–34 ($22,000), 35–44 ($65,000), 45–54 ($130,000), 55–64 ($195,000), 65+ ($265,000). The ASFA comfortable retirement standard requires $595,000 for singles and $690,000 for couples at age 67."}},
+      {"@type":"Question","name":"How is net worth calculated in Australia?","acceptedAnswer":{"@type":"Answer","text":"Net worth equals total assets minus total liabilities. Assets include property, superannuation, shares, managed funds, cash, vehicles, and other assets. Liabilities include mortgage, HECS-HELP debt, personal loans, credit cards, and car loans."}}
+    ]
+  }],
+  calculator:[
+    {"@context":"https://schema.org","@type":"SoftwareApplication","name":"Net Worth Calculator","url":BASE_URL,"description":"Free net worth percentile calculator for Australians based on ABS 2021–22 data. See where your wealth ranks by age.","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"AUD"}},
+    {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+      {"@type":"Question","name":"What is a good net worth at 30 in Australia?","acceptedAnswer":{"@type":"Answer","text":"The median net worth for Australians aged 25–34 is $145,000 (ABS 2021–22). Being above this places you in the top half of your age group. The 80th percentile for 25–34 year olds is approximately $490,000."}},
+      {"@type":"Question","name":"What net worth puts you in the top 1% in Australia?","acceptedAnswer":{"@type":"Answer","text":"A net worth of approximately $5,200,000 places you in the top 1% of all Australians according to ABS 2021–22 data. The top 5% threshold is $2,500,000 and the top 10% threshold is $1,650,000."}}
+    ]}
+  ],
+  income:[
+    {"@context":"https://schema.org","@type":"SoftwareApplication","name":"Income Percentile Calculator","url":BASE_URL,"description":"Free Australian income percentile calculator. Find where your salary ranks among Australian earners by age group, based on ATO data.","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"AUD"}},
+    {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+      {"@type":"Question","name":"What is the median income in Australia?","acceptedAnswer":{"@type":"Answer","text":"The median individual income in Australia is approximately $62,400 per year according to ATO Taxation Statistics. The average is higher at around $90,000 due to high earners lifting the mean."}},
+      {"@type":"Question","name":"What income is considered high in Australia?","acceptedAnswer":{"@type":"Answer","text":"An individual income of $95,000 places you in the top 20% of Australian earners. $130,000 puts you in the top 10%, $180,000 in the top 5%, and $350,000 in the top 1%."}}
+    ]}
+  ],
+  super:[
+    {"@context":"https://schema.org","@type":"SoftwareApplication","name":"Super on Track Checker","url":BASE_URL,"description":"Check if your superannuation balance is ahead or behind for your age. Compare against ATO median super balances and ASFA retirement targets.","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"AUD"}},
+    {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+      {"@type":"Question","name":"Am I behind on super?","acceptedAnswer":{"@type":"Answer","text":"If your super balance is below the median for your age group, you may be behind. ATO medians: 35–44 ($65,000), 45–54 ($130,000), 55–64 ($195,000). The ASFA comfortable retirement target is $595,000 for singles at age 67."}},
+      {"@type":"Question","name":"How much super do I need to retire comfortably in Australia?","acceptedAnswer":{"@type":"Answer","text":"The ASFA comfortable retirement standard recommends $595,000 for singles and $690,000 for couples at age 67 (2023–24). This funds a modest car, regular domestic travel, and some international travel."}}
+    ]}
+  ],
+  fire:[
+    {"@context":"https://schema.org","@type":"SoftwareApplication","name":"FIRE Calculator Australia","url":BASE_URL,"description":"Calculate your financial independence number using the 4% rule. Find how many years until you can retire early and discover your Coast FIRE milestone.","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"AUD"}},
+    {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+      {"@type":"Question","name":"What is the FIRE number in Australia?","acceptedAnswer":{"@type":"Answer","text":"Your FIRE number is 25 times your annual expenses, based on the 4% safe withdrawal rate. For $50,000 annual spending, you need $1,250,000 invested. For $80,000 spending, you need $2,000,000."}},
+      {"@type":"Question","name":"What is Coast FIRE?","acceptedAnswer":{"@type":"Answer","text":"Coast FIRE is when you have enough invested that compound growth alone will fund your retirement — you no longer need to save. You only need to earn enough to cover current living expenses. For many Australians, this is achievable in their 40s."}}
+    ]}
+  ],
+  gen:[{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+    {"@type":"Question","name":"Are Millennials worse off than Baby Boomers financially?","acceptedAnswer":{"@type":"Answer","text":"Millennials have higher net worths at 35 than Boomers did at the same age in real terms, but this is almost entirely driven by property price inflation. Property price-to-income ratios have risen from 4x (1980s) to 10–12x in major cities today."}},
+    {"@type":"Question","name":"What percentage of wealth do Baby Boomers hold in Australia?","acceptedAnswer":{"@type":"Answer","text":"Baby Boomers hold approximately 53% of all Australian household wealth despite being about 21% of the population, driven by decades of property ownership and superannuation accumulation."}}
+  ]}],
+  insights:[{"@context":"https://schema.org","@type":"CollectionPage","name":"Insights — WealthRank AU","description":"Data-driven articles on Australian wealth, income, superannuation, and financial independence.","url":BASE_URL}],
+  forecast:[{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Wealth Forecaster","url":BASE_URL,"description":"Project your net worth to retirement with custom savings rates, investment returns, and life events.","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"AUD"}}],
+};
 export default function App(){
   const [page,setPage]=useState("home");
   const [article,setArticle]=useState(null);
@@ -470,20 +532,30 @@ export default function App(){
     }catch(e){}
   },[]);
   useEffect(()=>{
-    const titles={
-      home:       "WealthRank AU — Where Do You Rank Financially?",
-      calculator: "Net Worth Calculator — Find Your Australian Wealth Percentile | WealthRank AU",
-      income:     "Income Calculator — Where Does Your Salary Rank? | WealthRank AU",
-      super:      "Super on Track Checker — Are You Ahead or Behind? | WealthRank AU",
-      forecast:   "Wealth Forecaster — Project Your Net Worth | WealthRank AU",
-      fire:       "FIRE Calculator — Your Financial Independence Number | WealthRank AU",
-      gen:        "Wealth by Generation — Millennials vs Boomers vs Gen X | WealthRank AU",
-      insights:   "Insights — Australian Wealth & Super Data | WealthRank AU",
-      "about-us": "About WealthRank AU — Our Story & Privacy",
-      about:      "Data Sources & Methodology | WealthRank AU",
-    };
-    document.title=titles[page]||titles.home;
-  },[page]);
+    const isArt=page==="article"&&article;
+    const artData=isArt?ARTICLES.find(a=>a.id===article):null;
+    const m=PAGE_META[page]||PAGE_META.home;
+    const title=isArt&&artData?`${artData.title} | WealthRank AU`:m.title;
+    const desc=isArt&&artData?artData.subtitle:m.desc;
+    document.title=title;
+    const setM=(sel,val)=>{const el=document.querySelector(sel);if(el)el.setAttribute("content",val);};
+    setM('meta[name="description"]',desc);
+    setM('meta[property="og:title"]',title);
+    setM('meta[property="og:description"]',desc);
+    setM('meta[name="twitter:title"]',title);
+    setM('meta[name="twitter:description"]',desc);
+    let schemas=null;
+    if(isArt&&artData){
+      schemas=[{"@context":"https://schema.org","@type":"Article","headline":artData.title,"description":artData.subtitle,"author":{"@type":"Organization","name":"WealthRank AU","url":BASE_URL},"publisher":{"@type":"Organization","name":"WealthRank AU","url":BASE_URL,"logo":{"@type":"ImageObject","url":`${BASE_URL}/social-card.png`}},"datePublished":"2026-06-01","url":BASE_URL,"mainEntityOfPage":{"@type":"WebPage","@id":BASE_URL}}];
+    }else{
+      schemas=PAGE_SCHEMAS[page]||null;
+    }
+    let el=document.getElementById("page-ld");
+    if(schemas){
+      if(!el){el=document.createElement("script");el.id="page-ld";el.type="application/ld+json";document.head.appendChild(el);}
+      el.textContent=JSON.stringify(schemas.length===1?schemas[0]:schemas);
+    }else if(el){el.remove();}
+  },[page,article]);
   const sp=(p)=>{setPage(p);window.scrollTo({top:0,behavior:"smooth"});};
   return(<div style={{minHeight:"100vh",background:"#0D1B2A",color:"#F0EDE6",fontFamily:"'Inter',system-ui,sans-serif"}}>
     <style>{`
